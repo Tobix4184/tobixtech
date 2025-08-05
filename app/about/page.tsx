@@ -3,484 +3,381 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
-  Calendar,
-  MapPin,
+  GraduationCap,
+  Users,
+  Award,
+  BookOpen,
+  Target,
+  Heart,
+  Lightbulb,
+  Globe,
   Mail,
   Phone,
-  Globe,
-  Github,
-  Linkedin,
-  Twitter,
-  Award,
-  Users,
-  Code,
-  Briefcase,
-  GraduationCap,
+  MapPin,
+  Calendar,
   Star,
-  Download,
-  ExternalLink,
-  User,
+  TrendingUp,
+  Shield,
+  Zap,
 } from "lucide-react"
 
 export default function AboutPage() {
-  const [activeTab, setActiveTab] = useState("overview")
+  const [activeTab, setActiveTab] = useState("story")
 
-  const skills = [
-    { name: "JavaScript/TypeScript", level: 95, category: "Frontend" },
-    { name: "React/Next.js", level: 92, category: "Frontend" },
-    { name: "Node.js/Express", level: 88, category: "Backend" },
-    { name: "Python/Django", level: 85, category: "Backend" },
-    { name: "MongoDB/PostgreSQL", level: 82, category: "Database" },
-    { name: "AWS/Cloud Services", level: 78, category: "DevOps" },
-    { name: "Docker/Kubernetes", level: 75, category: "DevOps" },
-    { name: "UI/UX Design", level: 80, category: "Design" },
+  const stats = [
+    { icon: Users, label: "Students Taught", value: "10,000+", color: "text-blue-600" },
+    { icon: BookOpen, label: "Courses Created", value: "50+", color: "text-green-600" },
+    { icon: Award, label: "Certificates Issued", value: "8,500+", color: "text-purple-600" },
+    { icon: Star, label: "Average Rating", value: "4.9/5", color: "text-yellow-600" },
   ]
 
-  const timeline = [
+  const values = [
     {
-      year: "2024",
-      title: "Senior Full Stack Developer",
-      company: "TobixTech Solutions",
-      description: "Leading development of educational platforms and enterprise applications.",
-      type: "work",
+      icon: Target,
+      title: "Excellence",
+      description: "We strive for the highest quality in everything we do, from course content to student support.",
     },
     {
-      year: "2023",
-      title: "Full Stack Developer",
-      company: "Tech Innovations Inc.",
-      description: "Developed scalable web applications using modern technologies.",
-      type: "work",
+      icon: Heart,
+      title: "Passion",
+      description: "Our love for teaching and technology drives us to create engaging learning experiences.",
     },
     {
-      year: "2022",
-      title: "Frontend Developer",
-      company: "Digital Agency Pro",
-      description: "Created responsive and interactive user interfaces for various clients.",
-      type: "work",
+      icon: Lightbulb,
+      title: "Innovation",
+      description: "We embrace new technologies and teaching methods to stay ahead of the curve.",
+    },
+    {
+      icon: Globe,
+      title: "Accessibility",
+      description: "Quality education should be available to everyone, regardless of background or location.",
+    },
+  ]
+
+  const team = [
+    {
+      name: "Tobias Johnson",
+      role: "Founder & Lead Instructor",
+      image: "/placeholder-user.jpg",
+      bio: "Full-stack developer with 8+ years of experience in web technologies and education.",
+      skills: ["React", "Node.js", "Python", "AWS", "Teaching"],
+    },
+    {
+      name: "Sarah Chen",
+      role: "Senior Developer & Instructor",
+      image: "/placeholder-user.jpg",
+      bio: "Frontend specialist passionate about creating beautiful, accessible user interfaces.",
+      skills: ["React", "TypeScript", "UI/UX", "Accessibility"],
+    },
+    {
+      name: "Michael Rodriguez",
+      role: "Backend Architect",
+      image: "/placeholder-user.jpg",
+      bio: "Systems architect with expertise in scalable backend solutions and cloud infrastructure.",
+      skills: ["Node.js", "MongoDB", "Docker", "Kubernetes"],
+    },
+  ]
+
+  const milestones = [
+    {
+      year: "2020",
+      title: "TobixTech Founded",
+      description: "Started with a vision to make quality tech education accessible to everyone.",
     },
     {
       year: "2021",
-      title: "Computer Science Degree",
-      company: "University of Technology",
-      description: "Bachelor of Science in Computer Science with honors.",
-      type: "education",
+      title: "First 1,000 Students",
+      description: "Reached our first major milestone with students from over 30 countries.",
     },
     {
-      year: "2020",
-      title: "Web Development Bootcamp",
-      company: "Code Academy",
-      description: "Intensive 6-month program covering full-stack development.",
-      type: "education",
-    },
-  ]
-
-  const achievements = [
-    {
-      title: "AWS Certified Solutions Architect",
-      issuer: "Amazon Web Services",
-      date: "2024",
-      icon: Award,
+      year: "2022",
+      title: "Platform Launch",
+      description: "Launched our comprehensive learning platform with interactive features.",
     },
     {
-      title: "React Developer Certification",
-      issuer: "Meta",
-      date: "2023",
-      icon: Code,
+      year: "2023",
+      title: "Corporate Partnerships",
+      description: "Partnered with leading tech companies to provide industry-relevant training.",
     },
     {
-      title: "Top Contributor",
-      issuer: "Open Source Community",
-      date: "2023",
-      icon: Github,
-    },
-    {
-      title: "Best Innovation Award",
-      issuer: "Tech Conference 2023",
-      date: "2023",
-      icon: Star,
-    },
-  ]
-
-  const projects = [
-    {
-      title: "TobixTech Learning Platform",
-      description:
-        "Comprehensive educational platform with course management, secure authentication, and certificate generation.",
-      tech: ["Next.js", "TypeScript", "MongoDB", "JWT"],
-      status: "Live",
-      link: "#",
-    },
-    {
-      title: "E-Commerce Dashboard",
-      description: "Advanced analytics dashboard for e-commerce businesses with real-time data visualization.",
-      tech: ["React", "D3.js", "Node.js", "PostgreSQL"],
-      status: "Live",
-      link: "#",
-    },
-    {
-      title: "Mobile Banking App",
-      description: "Secure mobile banking application with biometric authentication and real-time transactions.",
-      tech: ["React Native", "Firebase", "Stripe API"],
-      status: "In Development",
-      link: "#",
+      year: "2024",
+      title: "10,000+ Students",
+      description: "Celebrating over 10,000 students and 8,500 certificates issued.",
     },
   ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <div className="relative inline-block mb-6">
-            <Avatar className="w-32 h-32 mx-auto border-4 border-white shadow-xl">
-              <AvatarImage src="/placeholder-user.jpg" alt="Tobix" />
-              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                TB
-              </AvatarFallback>
-            </Avatar>
-            <div className="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center">
-              <div className="w-3 h-3 bg-white rounded-full"></div>
-            </div>
+      {/* Hero Section */}
+      <section className="relative py-20 px-4 text-center">
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <GraduationCap className="w-4 h-4" />
+            About TobixTech
           </div>
-
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Tobix - Full Stack Developer
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+            Empowering the Next Generation of Developers
           </h1>
-
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-            Passionate about creating innovative digital solutions that make a difference. Specializing in modern web
-            technologies and educational platforms.
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+            We're on a mission to make high-quality tech education accessible, engaging, and practical. Join thousands
+            of students who have transformed their careers with TobixTech.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
-              <Download className="w-4 h-4 mr-2" />
-              Download CV
-            </Button>
-            <Button variant="outline">
-              <Mail className="w-4 h-4 mr-2" />
-              Contact Me
-            </Button>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">5+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Years Experience</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">50+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Projects Completed</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">100+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Happy Clients</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">15+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Technologies</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 mb-8">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="skills">Skills</TabsTrigger>
-            <TabsTrigger value="experience">Experience</TabsTrigger>
-            <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="contact">Contact</TabsTrigger>
-          </TabsList>
-
-          {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="card-hover">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="w-5 h-5" />
-                    About Me
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-300">
-                    I'm a passionate full-stack developer with over 5 years of experience in creating innovative web
-                    applications and educational platforms. My journey in technology started with a curiosity about how
-                    things work, and it has evolved into a career dedicated to building solutions that make a positive
-                    impact.
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    I specialize in modern JavaScript frameworks, cloud technologies, and creating user-centric
-                    applications. When I'm not coding, you'll find me exploring new technologies, contributing to
-                    open-source projects, or sharing knowledge through teaching and mentoring.
-                  </p>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+            {stats.map((stat, index) => (
+              <Card
+                key={index}
+                className="text-center border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
+              >
+                <CardContent className="pt-6">
+                  <stat.icon className={`w-8 h-8 mx-auto mb-2 ${stat.color}`} />
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
                 </CardContent>
               </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <Card className="card-hover">
+      {/* Main Content */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsTrigger value="story">Our Story</TabsTrigger>
+              <TabsTrigger value="values">Our Values</TabsTrigger>
+              <TabsTrigger value="team">Our Team</TabsTrigger>
+              <TabsTrigger value="contact">Contact</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="story" className="space-y-8">
+              <Card className="border-0 shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Award className="w-5 h-5" />
-                    Recent Achievements
+                  <CardTitle className="text-3xl flex items-center gap-3">
+                    <BookOpen className="w-8 h-8 text-blue-600" />
+                    Our Journey
                   </CardTitle>
+                  <CardDescription className="text-lg">
+                    From a simple idea to a thriving educational platform
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <p className="text-lg leading-relaxed">
+                      TobixTech was born from a simple observation: traditional tech education was either too expensive,
+                      too theoretical, or too disconnected from real-world applications. Our founder, Tobias,
+                      experienced this firsthand while transitioning from a non-tech background into software
+                      development.
+                    </p>
+                    <p className="text-lg leading-relaxed">
+                      After years of struggling with outdated courses and impractical tutorials, Tobias decided to
+                      create the learning platform he wished he had access to. Starting with just a few YouTube videos,
+                      TobixTech has grown into a comprehensive educational ecosystem serving students worldwide.
+                    </p>
+                  </div>
+
+                  {/* Timeline */}
+                  <div className="space-y-6">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Key Milestones</h3>
+                    <div className="space-y-6">
+                      {milestones.map((milestone, index) => (
+                        <div key={index} className="flex gap-4 items-start">
+                          <div className="flex-shrink-0">
+                            <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+                              {milestone.year.slice(-2)}
+                            </div>
+                          </div>
+                          <div className="flex-grow">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Calendar className="w-4 h-4 text-gray-500" />
+                              <span className="text-sm text-gray-500">{milestone.year}</span>
+                            </div>
+                            <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                              {milestone.title}
+                            </h4>
+                            <p className="text-gray-600 dark:text-gray-300">{milestone.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="values" className="space-y-8">
+              <Card className="border-0 shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="text-3xl flex items-center gap-3">
+                    <Shield className="w-8 h-8 text-purple-600" />
+                    Our Core Values
+                  </CardTitle>
+                  <CardDescription className="text-lg">The principles that guide everything we do</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {achievements.slice(0, 3).map((achievement, index) => (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                          <achievement.icon className="w-5 h-5 text-white" />
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {values.map((value, index) => (
+                      <div key={index} className="flex gap-4 p-6 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                        <div className="flex-shrink-0">
+                          <value.icon className="w-8 h-8 text-blue-600" />
                         </div>
                         <div>
-                          <div className="font-semibold">{achievement.title}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {achievement.issuer} • {achievement.date}
-                          </div>
+                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{value.title}</h3>
+                          <p className="text-gray-600 dark:text-gray-300">{value.description}</p>
                         </div>
                       </div>
                     ))}
                   </div>
+
+                  <div className="mt-12 p-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-white">
+                    <div className="flex items-center gap-3 mb-4">
+                      <TrendingUp className="w-8 h-8" />
+                      <h3 className="text-2xl font-bold">Our Mission</h3>
+                    </div>
+                    <p className="text-lg leading-relaxed">
+                      To democratize tech education by providing high-quality, practical, and affordable courses that
+                      prepare students for real-world challenges. We believe that everyone deserves access to the tools
+                      and knowledge needed to build a successful career in technology.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
-            </div>
+            </TabsContent>
 
-            {/* Personal Info */}
-            <Card className="card-hover">
-              <CardHeader>
-                <CardTitle>Personal Information</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-blue-600" />
-                      <span>Born: January 15, 1995</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-blue-600" />
-                      <span>Location: San Francisco, CA</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <GraduationCap className="w-5 h-5 text-blue-600" />
-                      <span>Education: BS Computer Science</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Briefcase className="w-5 h-5 text-blue-600" />
-                      <span>Experience: 5+ Years</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Users className="w-5 h-5 text-blue-600" />
-                      <span>Team Size: 10+ Members</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Globe className="w-5 h-5 text-blue-600" />
-                      <span>Languages: English, Spanish</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Skills Tab */}
-          <TabsContent value="skills" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {["Frontend", "Backend", "Database", "DevOps", "Design"].map((category) => (
-                <Card key={category} className="card-hover">
-                  <CardHeader>
-                    <CardTitle>{category}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {skills
-                      .filter((skill) => skill.category === category)
-                      .map((skill, index) => (
-                        <div key={index} className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="font-medium">{skill.name}</span>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">{skill.level}%</span>
+            <TabsContent value="team" className="space-y-8">
+              <Card className="border-0 shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="text-3xl flex items-center gap-3">
+                    <Users className="w-8 h-8 text-green-600" />
+                    Meet Our Team
+                  </CardTitle>
+                  <CardDescription className="text-lg">
+                    The passionate educators and developers behind TobixTech
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-3 gap-8">
+                    {team.map((member, index) => (
+                      <Card key={index} className="text-center border-0 shadow-lg bg-gray-50 dark:bg-gray-700/50">
+                        <CardContent className="pt-6">
+                          <Avatar className="w-24 h-24 mx-auto mb-4">
+                            <AvatarImage src={member.image || "/placeholder.svg"} alt={member.name} />
+                            <AvatarFallback className="text-xl">
+                              {member.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")}
+                            </AvatarFallback>
+                          </Avatar>
+                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">{member.name}</h3>
+                          <p className="text-blue-600 dark:text-blue-400 font-medium mb-3">{member.role}</p>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{member.bio}</p>
+                          <div className="flex flex-wrap gap-2 justify-center">
+                            {member.skills.map((skill, skillIndex) => (
+                              <Badge key={skillIndex} variant="secondary" className="text-xs">
+                                {skill}
+                              </Badge>
+                            ))}
                           </div>
-                          <Progress value={skill.level} className="h-2" />
-                        </div>
-                      ))}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-            {/* Technology Stack */}
-            <Card className="card-hover">
-              <CardHeader>
-                <CardTitle>Technology Stack</CardTitle>
-                <CardDescription>Technologies and tools I work with regularly</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    "JavaScript",
-                    "TypeScript",
-                    "React",
-                    "Next.js",
-                    "Node.js",
-                    "Express",
-                    "Python",
-                    "Django",
-                    "MongoDB",
-                    "PostgreSQL",
-                    "AWS",
-                    "Docker",
-                    "Kubernetes",
-                    "Git",
-                    "Figma",
-                    "Tailwind CSS",
-                    "GraphQL",
-                    "REST API",
-                  ].map((tech) => (
-                    <Badge key={tech} variant="secondary" className="px-3 py-1">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Experience Tab */}
-          <TabsContent value="experience" className="space-y-6">
-            <div className="space-y-6">
-              {timeline.map((item, index) => (
-                <Card key={index} className="card-hover">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0">
-                        <div
-                          className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                            item.type === "work" ? "bg-blue-100 dark:bg-blue-900" : "bg-green-100 dark:bg-green-900"
-                          }`}
-                        >
-                          {item.type === "work" ? (
-                            <Briefcase
-                              className={`w-6 h-6 ${item.type === "work" ? "text-blue-600" : "text-green-600"}`}
-                            />
-                          ) : (
-                            <GraduationCap className="w-6 h-6 text-green-600" />
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-grow">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="outline">{item.year}</Badge>
-                          <Badge variant={item.type === "work" ? "default" : "secondary"}>
-                            {item.type === "work" ? "Work" : "Education"}
-                          </Badge>
-                        </div>
-                        <h3 className="text-xl font-semibold mb-1">{item.title}</h3>
-                        <p className="text-blue-600 dark:text-blue-400 font-medium mb-2">{item.company}</p>
-                        <p className="text-gray-600 dark:text-gray-300">{item.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Projects Tab */}
-          <TabsContent value="projects" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {projects.map((project, index) => (
-                <Card key={index} className="card-hover">
+            <TabsContent value="contact" className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card className="border-0 shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
                   <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">{project.title}</CardTitle>
-                      <Badge variant={project.status === "Live" ? "default" : "secondary"}>{project.status}</Badge>
-                    </div>
+                    <CardTitle className="text-3xl flex items-center gap-3">
+                      <Mail className="w-8 h-8 text-blue-600" />
+                      Get in Touch
+                    </CardTitle>
+                    <CardDescription className="text-lg">We'd love to hear from you</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-gray-600 dark:text-gray-300 text-sm">{project.description}</p>
-                    <div className="flex flex-wrap gap-1">
-                      {project.tech.map((tech) => (
-                        <Badge key={tech} variant="outline" className="text-xs">
-                          {tech}
-                        </Badge>
-                      ))}
+                  <CardContent className="space-y-6">
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                      <Mail className="w-6 h-6 text-blue-600" />
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">Email</div>
+                        <div className="text-gray-600 dark:text-gray-300">hello@tobixtech.com</div>
+                      </div>
                     </div>
-                    <Button size="sm" className="w-full">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      View Project
+
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                      <Phone className="w-6 h-6 text-green-600" />
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">Phone</div>
+                        <div className="text-gray-600 dark:text-gray-300">+1 (555) 123-4567</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                      <MapPin className="w-6 h-6 text-red-600" />
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">Location</div>
+                        <div className="text-gray-600 dark:text-gray-300">San Francisco, CA</div>
+                      </div>
+                    </div>
+
+                    <div className="pt-6">
+                      <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                        <Mail className="w-4 h-4 mr-2" />
+                        Send us a Message
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+                  <CardContent className="pt-8">
+                    <div className="flex items-center gap-3 mb-6">
+                      <Zap className="w-8 h-8" />
+                      <h3 className="text-2xl font-bold">Ready to Start Learning?</h3>
+                    </div>
+                    <p className="text-lg mb-8 opacity-90">
+                      Join thousands of students who have already transformed their careers with TobixTech. Start your
+                      journey today with our comprehensive courses and expert instruction.
+                    </p>
+
+                    <div className="space-y-4 mb-8">
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                        <span>Lifetime access to all course materials</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                        <span>Certificate of completion</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                        <span>Direct access to instructors</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                        <span>Community support</span>
+                      </div>
+                    </div>
+
+                    <Button variant="secondary" className="w-full bg-white text-blue-600 hover:bg-gray-100">
+                      <GraduationCap className="w-4 h-4 mr-2" />
+                      Browse Courses
                     </Button>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Contact Tab */}
-          <TabsContent value="contact" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="card-hover">
-                <CardHeader>
-                  <CardTitle>Get In Touch</CardTitle>
-                  <CardDescription>
-                    I'm always open to discussing new opportunities and interesting projects.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-blue-600" />
-                    <span>tobix@tobixtech.com</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-blue-600" />
-                    <span>+1 (555) 123-4567</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-blue-600" />
-                    <span>San Francisco, CA</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Globe className="w-5 h-5 text-blue-600" />
-                    <span>www.tobixtech.com</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="card-hover">
-                <CardHeader>
-                  <CardTitle>Social Links</CardTitle>
-                  <CardDescription>Connect with me on social media and professional networks.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
-                    <Github className="w-5 h-5 mr-3" />
-                    GitHub
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
-                    <Linkedin className="w-5 h-5 mr-3" />
-                    LinkedIn
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
-                    <Twitter className="w-5 h-5 mr-3" />
-                    Twitter
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
-                    <Globe className="w-5 h-5 mr-3" />
-                    Portfolio
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </section>
     </div>
   )
 }

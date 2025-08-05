@@ -4,12 +4,10 @@
 
 ### 1. **Environment Variables Setup**
 
-**Vercel Dashboard → Settings → Environment Variables:**
-
+Create a `.env.local` file in the root directory:
 \`\`\`env
-# Required Environment Variables
-BACKEND_URL=https://your-fly-app-name.fly.dev
-JWT_SECRET=your-64-character-hex-string
+BACKEND_URL=https://your-backend-api.com
+JWT_SECRET=your-super-secure-jwt-secret-key
 \`\`\`
 
 **Generate JWT Secret:**
@@ -34,27 +32,38 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ## 📁 Project Structure & Key Files
 
 \`\`\`
-tobixtech/
-├── app/                          # Next.js App Router
-│   ├── admin-login/             # Admin authentication
-│   ├── admin-dashboard/         # Admin management panel
-│   ├── courses/                 # Course pages & content
-│   ├── api/                     # API routes
-│   │   ├── admin/              # Admin API endpoints
-│   │   ├── validate-pin/       # PIN validation
-│   │   └── courses/            # Course content API
-│   └── globals.css             # Global styles with Tailwind
-├── components/                  # Reusable components
-│   ├── ui/                     # shadcn/ui components
+tobixtech-platform/
+├── app/                    # Next.js App Router pages
+│   ├── Adminpage/         # Admin dashboard
+│   ├── admin-login/       # Admin authentication
+│   ├── api/               # API routes
+│   ├── courses/           # Course pages
+│   ├── blog/              # Blog section
+│   ├── contact/           # Contact page
+│   ├── projects/          # Projects showcase
+│   ├── skills/            # Skills page
+│   ├── about/             # About page
+│   ├── become-tutor/      # Tutor application
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Home page
+├── components/            # Reusable components
+│   ├── ui/                # shadcn/ui components
 │   ├── certificate-generator.tsx
+│   ├── course-card.tsx
+│   ├── course-reviews.tsx
+│   ├── final-survey.tsx
+│   ├── footer.tsx
+│   ├── language-switcher.tsx
+│   ├── module-survey.tsx
 │   ├── navigation.tsx
+│   ├── theme-provider.tsx
 │   └── theme-toggle.tsx
-├── data/                       # Static data files
-│   ├── courses.json
-│   ├── users.json
-│   ├── pins.json
-│   └── blog-posts.json
-└── middleware.ts               # Route protection
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utility functions
+├── public/                # Static assets
+├── middleware.ts          # Next.js middleware
+└── package.json           # Dependencies
 \`\`\`
 
 ---
@@ -85,6 +94,8 @@ tobixtech/
   --primary: #3b82f6;        /* Blue primary */
   --primary-dark: #2563eb;   /* Darker blue */
   --accent: #8b5cf6;         /* Purple accent */
+  --dark: #1e293b;           /* Dark theme */
+  --light: #f8fafc;          /* Light theme */
 }
 \`\`\`
 
@@ -233,108 +244,84 @@ npm install        # Fresh dependency install
 
 ## 🔒 Security Best Practices
 
-### **1. Authentication Security**
-- JWT tokens expire in 4 hours
-- Secure HTTP-only cookies (if implemented)
-- Rate limiting on auth endpoints
+### **Environment Variables**
+- Never commit `.env` files to version control
+- Use different secrets for development and production
+- Rotate JWT secrets regularly
 
-### **2. Data Protection**
-- Input validation on all forms
-- SQL injection prevention
-- XSS protection with proper escaping
+### **API Security**
+- Implement rate limiting
+- Validate all inputs
+- Use HTTPS in production
+- Implement proper CORS policies
 
-### **3. Course Content Security**
-- Device-bound PIN system
-- Content access logging
-- Unauthorized access prevention
-
----
-
-## 📈 Analytics & Monitoring
-
-### **1. User Analytics**
-- Course completion rates
-- User engagement metrics
-- Popular content tracking
-
-### **2. System Monitoring**
-- API response times
-- Error rate monitoring
-- Uptime tracking
-
-### **3. Business Metrics**
-- Revenue tracking
-- User acquisition
-- Course performance
+### **Authentication**
+- Use secure, random JWT secrets
+- Implement token expiration
+- Add device binding for admin accounts
+- Log authentication attempts
 
 ---
 
-## 🚀 Future Enhancements
+## 📊 Analytics Integration
 
-### **Planned Features**
-- [ ] Mobile app development
-- [ ] Advanced analytics dashboard
-- [ ] Multi-language course content
-- [ ] Live streaming capabilities
-- [ ] AI-powered course recommendations
-- [ ] Advanced certificate customization
-- [ ] Payment gateway integration
-- [ ] Social learning features
+### Google Analytics
+Add to `app/layout.tsx`:
+\`\`\`tsx
+import Script from 'next/script'
 
-### **Technical Improvements**
-- [ ] GraphQL API implementation
-- [ ] Real-time notifications
-- [ ] Advanced caching layer
-- [ ] Microservices architecture
-- [ ] Enhanced security features
-
----
-
-## 📞 Support & Maintenance
-
-### **Getting Help**
-- 📧 **Technical Support**: dev@tobixtech.com
-- 📱 **WhatsApp**: +1234567890
-- 🌐 **Documentation**: https://docs.tobixtech.com
-- 🐛 **Bug Reports**: GitHub Issues
-
-### **Maintenance Schedule**
-- **Daily**: Automated backups
-- **Weekly**: Security updates
-- **Monthly**: Performance optimization
-- **Quarterly**: Feature updates
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'GA_MEASUREMENT_ID');
+          `}
+        </Script>
+      </head>
+      <body>{children}</body>
+    </html>
+  )
+}
+\`\`\`
 
 ---
 
-## ✅ Pre-Deployment Checklist
+## 📚 Additional Resources
 
-### **Environment Setup**
-- [ ] JWT_SECRET generated and set
-- [ ] BACKEND_URL configured
-- [ ] All dependencies installed
-- [ ] TypeScript compilation successful
+### Documentation
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [shadcn/ui Documentation](https://ui.shadcn.com)
 
-### **Testing**
-- [ ] Admin login functionality
-- [ ] Course PIN validation
-- [ ] Certificate generation
-- [ ] Mobile responsiveness
-- [ ] Dark/light theme toggle
-
-### **Security**
-- [ ] All API endpoints protected
-- [ ] Input validation implemented
-- [ ] Rate limiting configured
-- [ ] Error handling in place
-
-### **Performance**
-- [ ] Build optimization complete
-- [ ] Images optimized
-- [ ] Lighthouse score > 90
-- [ ] Core Web Vitals passing
+### Community
+- [Next.js GitHub](https://github.com/vercel/next.js)
+- [Tailwind CSS GitHub](https://github.com/tailwindlabs/tailwindcss)
+- [React Documentation](https://react.dev)
 
 ---
 
-**🎉 Your TobixTech platform is now ready for deployment!**
+## 🎉 Success!
 
-This comprehensive guide covers everything needed to successfully deploy, customize, and maintain your educational platform. Follow the steps carefully, and you'll have a professional, secure, and scalable learning management system.
+Your TobixTech platform is now ready for deployment! The platform includes:
+
+✅ **Complete Frontend** - Modern, responsive design
+✅ **Admin Dashboard** - Secure authentication and management
+✅ **Course System** - Interactive learning experience
+✅ **Certificate Generation** - Professional certificates
+✅ **Security Features** - JWT authentication with device binding
+✅ **SEO Optimization** - Search engine friendly
+✅ **Mobile Responsive** - Works on all devices
+✅ **Production Ready** - Optimized for deployment
+
+For additional support or questions, refer to the documentation or create an issue in the repository.
+
+**Happy coding! 🚀**
