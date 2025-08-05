@@ -1,380 +1,320 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Download, Award, Calendar, User, BookOpen, Star } from "lucide-react"
+import { Award, Download, Share2, Calendar, BookOpen, CheckCircle } from "lucide-react"
 
 interface CertificateData {
   studentName: string
   courseName: string
   completionDate: string
+  certificateId: string
   instructorName: string
-  courseHours: string
-  grade: string
+  courseHours: number
+  grade?: string
 }
 
-export function CertificateGenerator() {
-  const [certificateData, setCertificateData] = useState<CertificateData>({
-    studentName: "John Doe",
-    courseName: "React & Next.js Bootcamp",
-    completionDate: new Date().toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }),
-    instructorName: "Tobias Johnson",
-    courseHours: "40",
-    grade: "A+",
-  })
+interface CertificateGeneratorProps {
+  certificateData: CertificateData
+}
 
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+export default function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
+  const [isGenerating, setIsGenerating] = useState(false)
 
-  const generateCertificate = () => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+  const handleDownload = async () => {
+    setIsGenerating(true)
 
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+    try {
+      // Simulate certificate generation
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
-    // Set canvas size
-    canvas.width = 1200
-    canvas.height = 800
+      // Create certificate HTML content
+      const certificateHTML = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Certificate of Completion</title>
+          <style>
+            body {
+              font-family: 'Georgia', serif;
+              margin: 0;
+              padding: 40px;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .certificate {
+              background: white;
+              padding: 60px;
+              border-radius: 20px;
+              box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+              text-align: center;
+              max-width: 800px;
+              border: 8px solid #3b82f6;
+            }
+            .header {
+              margin-bottom: 40px;
+            }
+            .logo {
+              font-size: 32px;
+              font-weight: bold;
+              color: #3b82f6;
+              margin-bottom: 20px;
+            }
+            .title {
+              font-size: 48px;
+              color: #1e293b;
+              margin-bottom: 20px;
+              font-weight: bold;
+            }
+            .subtitle {
+              font-size: 24px;
+              color: #64748b;
+              margin-bottom: 40px;
+            }
+            .student-name {
+              font-size: 36px;
+              color: #3b82f6;
+              font-weight: bold;
+              margin: 30px 0;
+              text-decoration: underline;
+            }
+            .course-name {
+              font-size: 28px;
+              color: #1e293b;
+              margin: 30px 0;
+              font-style: italic;
+            }
+            .completion-text {
+              font-size: 18px;
+              color: #64748b;
+              margin: 20px 0;
+            }
+            .date {
+              font-size: 20px;
+              color: #1e293b;
+              margin: 20px 0;
+            }
+            .signature-section {
+              margin-top: 60px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+            .signature {
+              text-align: center;
+            }
+            .signature-line {
+              border-top: 2px solid #1e293b;
+              width: 200px;
+              margin: 20px auto 10px;
+            }
+            .instructor-name {
+              font-size: 18px;
+              font-weight: bold;
+              color: #1e293b;
+            }
+            .instructor-title {
+              font-size: 14px;
+              color: #64748b;
+            }
+            .seal {
+              width: 100px;
+              height: 100px;
+              border: 4px solid #3b82f6;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: #eff6ff;
+              font-size: 12px;
+              font-weight: bold;
+              color: #3b82f6;
+              text-align: center;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="certificate">
+            <div class="header">
+              <div class="logo">TobixTech</div>
+              <div class="title">Certificate of Completion</div>
+              <div class="subtitle">This is to certify that</div>
+            </div>
+            
+            <div class="student-name">${certificateData.studentName}</div>
+            
+            <div class="completion-text">has successfully completed the course</div>
+            
+            <div class="course-name">${certificateData.courseName}</div>
+            
+            <div class="completion-text">on</div>
+            
+            <div class="date">${certificateData.completionDate}</div>
+            
+            <div class="signature-section">
+              <div class="signature">
+                <div class="signature-line"></div>
+                <div class="instructor-name">${certificateData.instructorName}</div>
+                <div class="instructor-title">Lead Instructor</div>
+              </div>
+              
+              <div class="seal">
+                <div>
+                  TOBIX<br>
+                  TECH<br>
+                  CERTIFIED
+                </div>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
 
-    // Background gradient
-    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-    gradient.addColorStop(0, "#f8fafc")
-    gradient.addColorStop(0.5, "#ffffff")
-    gradient.addColorStop(1, "#f1f5f9")
-    ctx.fillStyle = gradient
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-    // Border
-    ctx.strokeStyle = "#3b82f6"
-    ctx.lineWidth = 8
-    ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80)
-
-    // Inner border
-    ctx.strokeStyle = "#1e40af"
-    ctx.lineWidth = 2
-    ctx.strokeRect(60, 60, canvas.width - 120, canvas.height - 120)
-
-    // Header
-    ctx.fillStyle = "#1e40af"
-    ctx.font = "bold 48px Arial"
-    ctx.textAlign = "center"
-    ctx.fillText("CERTIFICATE OF COMPLETION", canvas.width / 2, 150)
-
-    // Decorative line
-    ctx.strokeStyle = "#3b82f6"
-    ctx.lineWidth = 3
-    ctx.beginPath()
-    ctx.moveTo(300, 180)
-    ctx.lineTo(900, 180)
-    ctx.stroke()
-
-    // This is to certify that
-    ctx.fillStyle = "#64748b"
-    ctx.font = "24px Arial"
-    ctx.fillText("This is to certify that", canvas.width / 2, 240)
-
-    // Student name
-    ctx.fillStyle = "#1e293b"
-    ctx.font = "bold 42px Arial"
-    ctx.fillText(certificateData.studentName, canvas.width / 2, 300)
-
-    // Has successfully completed
-    ctx.fillStyle = "#64748b"
-    ctx.font = "24px Arial"
-    ctx.fillText("has successfully completed the course", canvas.width / 2, 350)
-
-    // Course name
-    ctx.fillStyle = "#3b82f6"
-    ctx.font = "bold 36px Arial"
-    ctx.fillText(certificateData.courseName, canvas.width / 2, 410)
-
-    // Course details
-    ctx.fillStyle = "#64748b"
-    ctx.font = "20px Arial"
-    ctx.fillText(
-      `Duration: ${certificateData.courseHours} hours | Grade: ${certificateData.grade}`,
-      canvas.width / 2,
-      460,
-    )
-
-    // Date and instructor section
-    ctx.fillStyle = "#1e293b"
-    ctx.font = "18px Arial"
-    ctx.textAlign = "left"
-
-    // Date
-    ctx.fillText("Date of Completion:", 200, 580)
-    ctx.font = "bold 18px Arial"
-    ctx.fillText(certificateData.completionDate, 200, 610)
-
-    // Instructor
-    ctx.font = "18px Arial"
-    ctx.textAlign = "right"
-    ctx.fillText("Instructor:", canvas.width - 200, 580)
-    ctx.font = "bold 18px Arial"
-    ctx.fillText(certificateData.instructorName, canvas.width - 200, 610)
-
-    // Signature line
-    ctx.strokeStyle = "#64748b"
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.moveTo(canvas.width - 350, 630)
-    ctx.lineTo(canvas.width - 50, 630)
-    ctx.stroke()
-
-    // TobixTech logo/brand
-    ctx.fillStyle = "#3b82f6"
-    ctx.font = "bold 28px Arial"
-    ctx.textAlign = "center"
-    ctx.fillText("TobixTech", canvas.width / 2, 700)
-
-    ctx.fillStyle = "#64748b"
-    ctx.font = "16px Arial"
-    ctx.fillText("Professional Development Platform", canvas.width / 2, 730)
+      // Create and download the certificate
+      const blob = new Blob([certificateHTML], { type: "text/html" })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `${certificateData.studentName.replace(/\s+/g, "_")}_${certificateData.courseName.replace(/\s+/g, "_")}_Certificate.html`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error("Error generating certificate:", error)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
-  const downloadCertificate = () => {
-    generateCertificate()
-
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    // Create download link
-    const link = document.createElement("a")
-    link.download = `${certificateData.studentName.replace(/\s+/g, "_")}_Certificate.png`
-    link.href = canvas.toDataURL()
-    link.click()
-  }
-
-  const handleInputChange = (field: keyof CertificateData, value: string) => {
-    setCertificateData((prev) => ({
-      ...prev,
-      [field]: value,
-    }))
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `Certificate of Completion - ${certificateData.courseName}`,
+        text: `I've completed ${certificateData.courseName} at Tobix Technology!`,
+        url: window.location.href,
+      })
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(window.location.href)
+    }
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-8">
-      <div className="text-center space-y-4">
-        <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-medium">
-          <Award className="w-4 h-4" />
-          Certificate Generator
+    <div className="max-w-4xl mx-auto">
+      {/* Certificate Preview */}
+      <Card className="mb-8 overflow-hidden">
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 p-8">
+          {/* Certificate Header */}
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Award className="h-10 w-10 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">Certificate of Completion</h1>
+            <p className="text-gray-600 dark:text-gray-400">Tobix Technology Learning Platform</p>
+          </div>
+
+          {/* Certificate Body */}
+          <div className="text-center mb-8">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">This is to certify that</p>
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-6 border-b-2 border-gray-300 dark:border-gray-600 pb-2 inline-block">
+              {certificateData.studentName}
+            </h2>
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">has successfully completed the course</p>
+            <h3 className="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6">
+              {certificateData.courseName}
+            </h3>
+
+            {/* Course Details */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="text-center">
+                <Calendar className="h-6 w-6 text-gray-500 mx-auto mb-2" />
+                <p className="text-sm text-gray-600 dark:text-gray-400">Completion Date</p>
+                <p className="font-semibold">{certificateData.completionDate}</p>
+              </div>
+              <div className="text-center">
+                <BookOpen className="h-6 w-6 text-gray-500 mx-auto mb-2" />
+                <p className="text-sm text-gray-600 dark:text-gray-400">Course Hours</p>
+                <p className="font-semibold">{certificateData.courseHours} hours</p>
+              </div>
+              <div className="text-center">
+                <CheckCircle className="h-6 w-6 text-gray-500 mx-auto mb-2" />
+                <p className="text-sm text-gray-600 dark:text-gray-400">Grade</p>
+                <p className="font-semibold">{certificateData.grade || "Pass"}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Certificate Footer */}
+          <div className="flex justify-between items-end">
+            <div className="text-left">
+              <div className="border-t-2 border-gray-400 pt-2 w-48">
+                <p className="font-semibold">{certificateData.instructorName}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Course Instructor</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-2">
+                <Award className="h-8 w-8 text-blue-500" />
+              </div>
+              <p className="text-xs text-gray-500">Official Seal</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-gray-500 mb-2">Certificate ID</p>
+              <p className="font-mono text-sm">{certificateData.certificateId}</p>
+            </div>
+          </div>
         </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Generate Your Certificate
-        </h1>
-        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Create professional certificates for course completion. Customize the details and download your certificate.
-        </p>
-      </div>
+      </Card>
 
-      <div className="grid lg:grid-cols-2 gap-8">
-        {/* Form Section */}
-        <Card className="border-0 shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="w-5 h-5 text-blue-600" />
-              Certificate Details
-            </CardTitle>
-            <CardDescription>Fill in the information to generate your certificate</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="studentName" className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                Student Name
-              </Label>
-              <Input
-                id="studentName"
-                value={certificateData.studentName}
-                onChange={(e) => handleInputChange("studentName", e.target.value)}
-                placeholder="Enter student name"
-              />
-            </div>
+      {/* Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Award className="h-5 w-5" />
+            <span>Certificate Actions</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button
+              onClick={handleDownload}
+              disabled={isGenerating}
+              className="flex-1 flex items-center justify-center space-x-2"
+            >
+              <Download className="h-4 w-4" />
+              <span>{isGenerating ? "Generating PDF..." : "Download Certificate"}</span>
+            </Button>
 
-            <div className="space-y-2">
-              <Label htmlFor="courseName" className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4" />
-                Course Name
-              </Label>
-              <Input
-                id="courseName"
-                value={certificateData.courseName}
-                onChange={(e) => handleInputChange("courseName", e.target.value)}
-                placeholder="Enter course name"
-              />
-            </div>
+            <Button
+              variant="outline"
+              onClick={handleShare}
+              className="flex-1 flex items-center justify-center space-x-2 bg-transparent"
+            >
+              <Share2 className="h-4 w-4" />
+              <span>Share on LinkedIn</span>
+            </Button>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="courseHours" className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  Course Hours
-                </Label>
-                <Input
-                  id="courseHours"
-                  value={certificateData.courseHours}
-                  onChange={(e) => handleInputChange("courseHours", e.target.value)}
-                  placeholder="40"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="grade" className="flex items-center gap-2">
-                  <Star className="w-4 h-4" />
-                  Grade
-                </Label>
-                <Input
-                  id="grade"
-                  value={certificateData.grade}
-                  onChange={(e) => handleInputChange("grade", e.target.value)}
-                  placeholder="A+"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="completionDate" className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                Completion Date
-              </Label>
-              <Input
-                id="completionDate"
-                type="date"
-                value={new Date(certificateData.completionDate).toISOString().split("T")[0]}
-                onChange={(e) => {
-                  const date = new Date(e.target.value)
-                  handleInputChange(
-                    "completionDate",
-                    date.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }),
-                  )
-                }}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="instructorName" className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                Instructor Name
-              </Label>
-              <Input
-                id="instructorName"
-                value={certificateData.instructorName}
-                onChange={(e) => handleInputChange("instructorName", e.target.value)}
-                placeholder="Enter instructor name"
-              />
-            </div>
-
-            <div className="pt-4 space-y-4">
-              <Button onClick={generateCertificate} className="w-full bg-blue-600 hover:bg-blue-700">
-                <Award className="w-4 h-4 mr-2" />
-                Generate Preview
-              </Button>
-
-              <Button onClick={downloadCertificate} variant="outline" className="w-full bg-transparent">
-                <Download className="w-4 h-4 mr-2" />
-                Download Certificate
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Preview Section */}
-        <Card className="border-0 shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="w-5 h-5 text-purple-600" />
-              Certificate Preview
-            </CardTitle>
-            <CardDescription>Preview your certificate before downloading</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700/50">
-              <canvas
-                ref={canvasRef}
-                className="w-full h-auto border rounded shadow-sm bg-white"
-                style={{ maxWidth: "100%", height: "auto" }}
-              />
-            </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <User className="w-3 h-3" />
-                {certificateData.studentName}
-              </Badge>
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <BookOpen className="w-3 h-3" />
-                {certificateData.courseName}
-              </Badge>
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                {certificateData.completionDate}
-              </Badge>
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <Star className="w-3 h-3" />
-                {certificateData.grade}
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Features Section */}
-      <Card className="border-0 shadow-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <CardContent className="pt-8">
-          <div className="text-center space-y-4">
-            <Award className="w-12 h-12 mx-auto" />
-            <h3 className="text-2xl font-bold">Professional Certificates</h3>
-            <p className="text-lg opacity-90 max-w-2xl mx-auto">
-              Our certificates are professionally designed and can be used to showcase your achievements to employers,
-              on LinkedIn, or in your portfolio.
-            </p>
-
-            <div className="grid md:grid-cols-3 gap-6 mt-8">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Download className="w-6 h-6" />
-                </div>
-                <h4 className="font-semibold mb-2">High Quality</h4>
-                <p className="text-sm opacity-80">Download in high resolution PNG format</p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Award className="w-6 h-6" />
-                </div>
-                <h4 className="font-semibold mb-2">Professional Design</h4>
-                <p className="text-sm opacity-80">Clean, modern design suitable for any use</p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <User className="w-6 h-6" />
-                </div>
-                <h4 className="font-semibold mb-2">Personalized</h4>
-                <p className="text-sm opacity-80">Customized with your details and achievements</p>
-              </div>
-            </div>
+          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
+            <h4 className="font-semibold mb-2 flex items-center space-x-2">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span>Certificate Features</span>
+            </h4>
+            <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+              <li>• Unique certificate ID for verification</li>
+              <li>• Professional PDF format suitable for printing</li>
+              <li>• LinkedIn integration for profile enhancement</li>
+              <li>• Permanent record in your learning portfolio</li>
+            </ul>
           </div>
         </CardContent>
       </Card>
     </div>
   )
 }
-
-// Named export for flexibility
-
-// Default export for backward compatibility
-export default CertificateGenerator

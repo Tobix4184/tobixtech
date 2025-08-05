@@ -1,13 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
-import { Lock, CheckCircle, Play } from "lucide-react"
+import { Lock, CheckCircle, Play, Shield } from "lucide-react"
 
 const courseData = {
   "meta-facebook-ads": {
@@ -51,15 +52,32 @@ const courseData = {
   },
 }
 
+// Generate or retrieve device ID
+function getDeviceId(): string {
+  if (typeof window === "undefined") return ""
+
+  let deviceId = localStorage.getItem("tobixtech_device_id")
+  if (!deviceId) {
+    deviceId = crypto.randomUUID()
+    localStorage.setItem("tobixtech_device_id", deviceId)
+  }
+  return deviceId
+}
+
 export default function CoursePage() {
   const params = useParams()
   const router = useRouter()
   const { toast } = useToast()
   const [pin, setPin] = useState("")
   const [isValidating, setIsValidating] = useState(false)
+  const [deviceId, setDeviceId] = useState("")
 
   const courseId = params.courseId as string
   const course = courseData[courseId as keyof typeof courseData]
+
+  useEffect(() => {
+    setDeviceId(getDeviceId())
+  }, [])
 
   if (!course) {
     return (
@@ -93,6 +111,7 @@ export default function CoursePage() {
         body: JSON.stringify({
           courseId,
           pin,
+          deviceId,
         }),
       })
 
@@ -100,11 +119,11 @@ export default function CoursePage() {
 
       if (data.valid) {
         // Set a secure cookie for course access
-        document.cookie = `course-access=${courseId}-${pin}; path=/; max-age=86400; secure; samesite=strict`
+        document.cookie = `course-access=${courseId}-${pin}-${deviceId}; path=/; max-age=86400; secure; samesite=strict`
 
         toast({
           title: "Access Granted!",
-          description: "Redirecting to course content...",
+          description: "PIN linked to your device. Redirecting to course content...",
         })
 
         // Small delay for better UX
@@ -114,7 +133,7 @@ export default function CoursePage() {
       } else {
         toast({
           title: "Invalid PIN",
-          description: "The PIN you entered is incorrect. Please try again.",
+          description: data.message || "The PIN you entered is incorrect. Please try again.",
           variant: "destructive",
         })
       }
@@ -170,6 +189,13 @@ export default function CoursePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <Alert>
+                <Shield className="h-4 w-4" />
+                <AlertDescription>
+                  PIN will be linked to your device for security. Device ID: {deviceId.slice(0, 8)}...
+                </AlertDescription>
+              </Alert>
+
               <div>
                 <label htmlFor="pin" className="block text-sm font-medium mb-2">
                   Enter your 5-digit PIN

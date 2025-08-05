@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "pin": "12345",
+    "courseId": "meta-facebook-ads",
+    "usageLimit": 1,
+    "usedCount": 0,
+    "deviceId": null,
+    "expirationDate": "2024-12-31T23:59:59.000Z",
+    "createdAt": "2024-01-10T09:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "pin": "67890",
+    "courseId": "web-development-fundamentals",
+    "usageLimit": 1,
+    "usedCount": 1,
+    "deviceId": "abc123-def456-ghi789",
+    "expirationDate": "2024-12-31T23:59:59.000Z",
+    "createdAt": "2024-01-12T11:30:00.000Z",
+    "status": "active"
+  }
+]

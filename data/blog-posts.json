@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "title": "Getting Started with Facebook Ads",
+    "slug": "getting-started-with-facebook-ads",
+    "content": "Facebook advertising can be overwhelming for beginners. In this comprehensive guide, we'll walk you through the basics of setting up your first Facebook ad campaign...",
+    "thumbnail": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=500&h=300&fit=crop",
+    "tags": ["facebook-ads", "marketing", "beginners"],
+    "author": "TobixTech",
+    "status": "published",
+    "views": 1250,
+    "createdAt": "2024-01-05T10:00:00.000Z",
+    "updatedAt": "2024-01-05T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Modern Web Development Trends 2024",
+    "slug": "modern-web-development-trends-2024",
+    "content": "The web development landscape is constantly evolving. Here are the top trends and technologies you should know about in 2024...",
+    "thumbnail": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=500&h=300&fit=crop",
+    "tags": ["web-development", "trends", "2024"],
+    "author": "TobixTech",
+    "status": "published",
+    "views": 890,
+    "createdAt": "2024-01-10T14:30:00.000Z",
+    "updatedAt": "2024-01-10T14:30:00.000Z"
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "meta-facebook-ads",
+    "title": "Meta Facebook Ads Mastery",
+    "description": "Complete guide to Facebook advertising, from setup to advanced optimization strategies.",
+    "price": "$97",
+    "thumbnail": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=500&h=300&fit=crop",
+    "modules": [
+      "Facebook Ads Manager Setup",
+      "Campaign Structure & Objectives",
+      "Audience Targeting Mastery",
+      "Creative Strategy & Testing",
+      "Budget Optimization",
+      "Analytics & Reporting"
+    ],
+    "status": "published",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "web-development-fundamentals",
+    "title": "Web Development Fundamentals",
+    "description": "Learn HTML, CSS, JavaScript, and modern web development practices from scratch.",
+    "price": "$127",
+    "thumbnail": "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=500&h=300&fit=crop",
+    "modules": [
+      "HTML5 Fundamentals",
+      "CSS3 & Responsive Design",
+      "JavaScript Basics",
+      "DOM Manipulation",
+      "Git & Version Control",
+      "Project Deployment"
+    ],
+    "status": "published",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "react-nextjs-bootcamp",
+    "title": "React & Next.js Bootcamp",
+    "description": "Build modern web applications with React and Next.js framework.",
+    "price": "$197",
+    "thumbnail": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=500&h=300&fit=crop",
+    "modules": [
+      "React Fundamentals",
+      "Component Architecture",
+      "State Management",
+      "Next.js App Router",
+      "API Integration",
+      "Full-Stack Development"
+    ],
+    "status": "published",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+]

@@ -1,508 +1,427 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { CheckCircle, Play, Download, ExternalLink, ArrowRight, ArrowLeft, Mail, Award, Loader2 } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useToast } from "@/hooks/use-toast"
 import { ModuleSurvey } from "@/components/module-survey"
-import CertificateGenerator from "@/components/certificate-generator"
 import { FinalSurvey } from "@/components/final-survey"
+import { CertificateGenerator } from "@/components/certificate-generator"
+import { CheckCircle, Play, Lock, BookOpen, Award, Loader2 } from "lucide-react"
 
-const modules = [
+const courseModules = [
   {
     id: 1,
     title: "HTML5 Fundamentals",
-    completed: false,
-    content: {
-      title: "Building the Foundation with HTML5",
-      description: "Learn the building blocks of web development with modern HTML5 elements and semantic markup.",
-      learningObjectives: [
-        "Understanding HTML5 document structure",
-        "Working with semantic elements",
-        "Forms and input validation",
-        "Accessibility best practices",
-      ],
-      steps: [
-        {
-          title: "Step 1: HTML5 Document Structure",
-          content:
-            "Every HTML5 document starts with a DOCTYPE declaration and follows a specific structure with html, head, and body elements.",
-          tips: "Always use semantic HTML5 elements like header, nav, main, section, article, and footer for better accessibility and SEO.",
-        },
-        {
-          title: "Step 2: Semantic Elements",
-          content:
-            "HTML5 introduces semantic elements that give meaning to your content structure, making it more accessible to screen readers and search engines.",
-          tips: "Use header for page/section headers, nav for navigation menus, main for primary content, and aside for sidebar content.",
-        },
-        {
-          title: "Step 3: Forms and Validation",
-          content:
-            "HTML5 provides built-in form validation with new input types like email, url, number, and date, along with validation attributes.",
-          tips: "Use the 'required' attribute for mandatory fields and 'pattern' for custom validation rules.",
-        },
-        {
-          title: "Step 4: Accessibility Features",
-          content:
-            "Implement ARIA labels, alt text for images, and proper heading hierarchy to make your websites accessible to all users.",
-          tips: "Test your website with screen readers and keyboard navigation to ensure it's truly accessible.",
-        },
-      ],
-    },
-    survey: [
-      {
-        question: "What is the purpose of semantic HTML5 elements?",
-        options: [
-          "To make websites load faster",
-          "To give meaning to content structure for accessibility and SEO",
-          "To reduce code size",
-          "To add styling to elements",
-        ],
-        correct: 1,
-      },
-      {
-        question: "Which HTML5 input type is best for email addresses?",
-        options: ["text", "email", "url", "string"],
-        correct: 1,
-      },
-    ],
+    content:
+      "Master the building blocks of the web with HTML5. Learn semantic markup, forms, multimedia elements, and modern HTML5 APIs.",
+    videoUrl: "https://example.com/video1",
+    duration: "60 minutes",
+    resources: ["HTML5 Cheat Sheet", "Semantic Elements Guide", "Form Validation Examples"],
   },
   {
     id: 2,
     title: "CSS3 & Responsive Design",
-    completed: false,
-    content: {
-      title: "Styling and Layout with CSS3",
-      description: "Master modern CSS3 features including Flexbox, Grid, and responsive design principles.",
-      learningObjectives: [
-        "CSS3 selectors and properties",
-        "Flexbox and Grid layouts",
-        "Responsive design with media queries",
-        "CSS animations and transitions",
-      ],
-      steps: [
-        {
-          title: "Step 1: CSS3 Fundamentals",
-          content:
-            "Learn advanced CSS3 selectors, pseudo-classes, and modern properties for styling web elements effectively.",
-          tips: "Use CSS custom properties (variables) to maintain consistent styling across your website.",
-        },
-        {
-          title: "Step 2: Flexbox Layout",
-          content:
-            "Master Flexbox for one-dimensional layouts, perfect for navigation bars, card layouts, and centering content.",
-          tips: "Use 'justify-content' for horizontal alignment and 'align-items' for vertical alignment in flex containers.",
-        },
-        {
-          title: "Step 3: CSS Grid",
-          content:
-            "Learn CSS Grid for complex two-dimensional layouts, ideal for page layouts and component positioning.",
-          tips: "Start with simple grid templates and gradually add complexity as you become more comfortable.",
-        },
-        {
-          title: "Step 4: Responsive Design",
-          content:
-            "Implement mobile-first responsive design using media queries, flexible units, and responsive images.",
-          tips: "Always design for mobile first, then enhance for larger screens using min-width media queries.",
-        },
-      ],
-    },
-    survey: [
-      {
-        question: "What is the mobile-first approach in responsive design?",
-        options: [
-          "Designing for desktop first",
-          "Designing for mobile devices first, then enhancing for larger screens",
-          "Only designing for mobile devices",
-          "Using only mobile-specific CSS",
-        ],
-        correct: 1,
-      },
-      {
-        question: "Which CSS layout method is best for two-dimensional layouts?",
-        options: ["Flexbox", "CSS Grid", "Float", "Position"],
-        correct: 1,
-      },
-    ],
+    content:
+      "Create beautiful, responsive layouts with CSS3. Master Flexbox, Grid, animations, and mobile-first design principles.",
+    videoUrl: "https://example.com/video2",
+    duration: "90 minutes",
+    resources: ["CSS Grid Template", "Flexbox Guide", "Responsive Breakpoints"],
   },
   {
     id: 3,
-    title: "JavaScript Fundamentals",
-    completed: false,
-    content: {
-      title: "Interactive Web Development with JavaScript",
-      description:
-        "Learn JavaScript fundamentals including variables, functions, DOM manipulation, and modern ES6+ features.",
-      learningObjectives: [
-        "JavaScript syntax and data types",
-        "Functions and scope",
-        "DOM manipulation",
-        "Event handling and async programming",
-      ],
-      steps: [
-        {
-          title: "Step 1: JavaScript Basics",
-          content: "Understand variables, data types, operators, and control structures in JavaScript.",
-          tips: "Use 'const' for values that won't change, 'let' for variables that will change, and avoid 'var' in modern JavaScript.",
-        },
-        {
-          title: "Step 2: Functions and Scope",
-          content:
-            "Learn about function declarations, expressions, arrow functions, and how scope works in JavaScript.",
-          tips: "Arrow functions are great for short functions and maintain the 'this' context from their surrounding scope.",
-        },
-        {
-          title: "Step 3: DOM Manipulation",
-          content: "Master selecting elements, modifying content, and dynamically updating the webpage structure.",
-          tips: "Use querySelector() and querySelectorAll() for modern element selection instead of older methods.",
-        },
-        {
-          title: "Step 4: Events and Async Programming",
-          content:
-            "Handle user interactions with event listeners and work with asynchronous code using promises and async/await.",
-          tips: "Always handle errors in async operations using try/catch blocks or .catch() methods.",
-        },
-      ],
-    },
-    survey: [
-      {
-        question: "Which keyword should you use for variables that won't change?",
-        options: ["var", "let", "const", "static"],
-        correct: 2,
-      },
-      {
-        question: "What is the modern way to select elements in the DOM?",
-        options: ["getElementById()", "querySelector()", "getElementsByClassName()", "getElementsByTagName()"],
-        correct: 1,
-      },
-    ],
+    title: "JavaScript Basics",
+    content: "Learn JavaScript fundamentals including variables, functions, control structures, and ES6+ features.",
+    videoUrl: "https://example.com/video3",
+    duration: "120 minutes",
+    resources: ["JavaScript Cheat Sheet", "ES6 Features Guide", "Practice Exercises"],
+  },
+  {
+    id: 4,
+    title: "DOM Manipulation",
+    content:
+      "Interact with web pages dynamically using JavaScript DOM APIs. Learn event handling, element selection, and dynamic content creation.",
+    videoUrl: "https://example.com/video4",
+    duration: "75 minutes",
+    resources: ["DOM Methods Reference", "Event Handling Examples", "Interactive Projects"],
+  },
+  {
+    id: 5,
+    title: "Git & Version Control",
+    content:
+      "Master Git for version control. Learn branching, merging, collaboration workflows, and best practices for code management.",
+    videoUrl: "https://example.com/video5",
+    duration: "45 minutes",
+    resources: ["Git Commands Cheat Sheet", "Workflow Diagrams", "GitHub Setup Guide"],
+  },
+  {
+    id: 6,
+    title: "Project Deployment",
+    content:
+      "Deploy your web projects to production. Learn about hosting options, domain setup, and deployment automation.",
+    videoUrl: "https://example.com/video6",
+    duration: "55 minutes",
+    resources: ["Deployment Checklist", "Hosting Comparison", "CI/CD Templates"],
   },
 ]
-
-const finalSurveyQuestions = [
-  {
-    question: "What is the main benefit of using semantic HTML5 elements?",
-    options: ["Faster loading times", "Better accessibility and SEO", "Smaller file sizes", "Automatic styling"],
-    correct: 1,
-  },
-  {
-    question: "Which CSS layout method is best for one-dimensional layouts?",
-    options: ["CSS Grid", "Flexbox", "Float", "Position"],
-    correct: 1,
-  },
-  {
-    question: "What is the recommended approach for responsive design?",
-    options: ["Desktop-first", "Mobile-first", "Tablet-first", "No specific approach"],
-    correct: 1,
-  },
-  {
-    question: "Which JavaScript keyword should be used for constants?",
-    options: ["var", "let", "const", "final"],
-    correct: 2,
-  },
-  {
-    question: "What is the modern method for selecting DOM elements?",
-    options: ["getElementById", "querySelector", "getElementsByClass", "getElement"],
-    correct: 1,
-  },
-]
-
-const certificateData = {
-  studentName: "Student Name",
-  courseName: "Web Development Fundamentals",
-  completionDate: new Date().toLocaleDateString(),
-  certificateId: `CERT-WDF-${Date.now()}`,
-  instructorName: "Tobix Technology",
-  courseHours: 40,
-  grade: "A+",
-}
 
 export default function WebDevelopmentFundamentalsContent() {
+  const router = useRouter()
+  const { toast } = useToast()
   const [currentModule, setCurrentModule] = useState(1)
   const [completedModules, setCompletedModules] = useState<number[]>([])
-  const [showSurvey, setShowSurvey] = useState(false)
-  const [surveyCompleted, setSurveyCompleted] = useState<number[]>([])
-  const [showCertificate, setShowCertificate] = useState(false)
+  const [showModuleSurvey, setShowModuleSurvey] = useState(false)
   const [showFinalSurvey, setShowFinalSurvey] = useState(false)
-  const [isLoadingFinalAssessment, setIsLoadingFinalAssessment] = useState(false)
+  const [showCertificate, setShowCertificate] = useState(false)
+  const [finalSurveyPassed, setFinalSurveyPassed] = useState(false)
+  const [isValidatingAccess, setIsValidatingAccess] = useState(true)
+  const [hasAccess, setHasAccess] = useState(false)
+  const [isLoadingAssessment, setIsLoadingAssessment] = useState(false)
 
-  const currentModuleData = modules.find((m) => m.id === currentModule)
-  const progress = (completedModules.length / modules.length) * 100
-  const allModulesCompleted = completedModules.length === modules.length
+  useEffect(() => {
+    validateCourseAccess()
+  }, [])
 
-  const handleNextModule = async () => {
-    if (currentModule < modules.length) {
-      setShowSurvey(true)
-    } else if (allModulesCompleted) {
-      setIsLoadingFinalAssessment(true)
-
-      setTimeout(() => {
-        setIsLoadingFinalAssessment(false)
-        setShowFinalSurvey(true)
-      }, 1500)
-    }
-  }
-
-  const handleSurveyComplete = (passed: boolean) => {
-    if (passed) {
-      setCompletedModules((prev) => [...prev, currentModule])
-      setSurveyCompleted((prev) => [...prev, currentModule])
-      setShowSurvey(false)
-      if (currentModule < modules.length) {
-        setCurrentModule((prev) => prev + 1)
+  const validateCourseAccess = async () => {
+    try {
+      const deviceId = localStorage.getItem("tobixtech_device_id")
+      if (!deviceId) {
+        toast({
+          title: "Access Denied",
+          description: "Device ID not found. Please re-enter your PIN.",
+          variant: "destructive",
+        })
+        router.push("/courses/web-development-fundamentals")
+        return
       }
+
+      const cookies = document.cookie.split(";")
+      const accessCookie = cookies.find(
+        (cookie) =>
+          cookie.trim().startsWith("course-access=") &&
+          cookie.includes("web-development-fundamentals") &&
+          cookie.includes(deviceId),
+      )
+
+      if (!accessCookie) {
+        toast({
+          title: "Access Denied",
+          description: "Course access not found. Please re-enter your PIN.",
+          variant: "destructive",
+        })
+        router.push("/courses/web-development-fundamentals")
+        return
+      }
+
+      const response = await fetch("/api/courses/web-development-fundamentals/content", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${deviceId}`,
+          "Content-Type": "application/json",
+        },
+      })
+
+      if (response.ok) {
+        setHasAccess(true)
+      } else {
+        const data = await response.json()
+        toast({
+          title: "Access Denied",
+          description: data.message || "Invalid course access",
+          variant: "destructive",
+        })
+        router.push("/courses/web-development-fundamentals")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to validate course access",
+        variant: "destructive",
+      })
+      router.push("/courses/web-development-fundamentals")
+    } finally {
+      setIsValidatingAccess(false)
+    }
+  }
+
+  const handleCompleteModule = () => {
+    if (!completedModules.includes(currentModule)) {
+      setCompletedModules([...completedModules, currentModule])
+    }
+    setShowModuleSurvey(true)
+  }
+
+  const handleModuleSurveyComplete = () => {
+    setShowModuleSurvey(false)
+
+    if (currentModule < courseModules.length) {
+      setCurrentModule(currentModule + 1)
     } else {
-      setShowSurvey(false)
+      setShowFinalSurvey(true)
     }
   }
 
-  const handlePreviousModule = () => {
-    if (currentModule > 1) {
-      setCurrentModule((prev) => prev - 1)
-      setShowSurvey(false)
-    }
-  }
-
-  const handleFinalSurveyComplete = () => {
+  const handleFinalSurveyComplete = (passed: boolean) => {
+    setFinalSurveyPassed(passed)
     setShowFinalSurvey(false)
-    setShowCertificate(true)
+
+    if (passed) {
+      setShowCertificate(true)
+      toast({
+        title: "Congratulations!",
+        description: "You have successfully completed the course and passed the final assessment!",
+      })
+    } else {
+      toast({
+        title: "Assessment Not Passed",
+        description: "Please review the course materials and try again.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleTakeFinalAssessment = () => {
+    setIsLoadingAssessment(true)
+    setTimeout(() => {
+      setIsLoadingAssessment(false)
+      setShowFinalSurvey(true)
+    }, 2000)
+  }
+
+  const progress = (completedModules.length / courseModules.length) * 100
+  const allModulesCompleted = completedModules.length === courseModules.length
+
+  if (isValidatingAccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p>Validating course access...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!hasAccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Lock className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+          <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">You don't have access to this course content.</p>
+          <Button onClick={() => router.push("/courses/web-development-fundamentals")}>Go Back</Button>
+        </div>
+      </div>
+    )
   }
 
   if (showCertificate) {
     return (
-      <div className="min-h-screen py-16 px-4 md:px-12 lg:px-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <Badge className="mb-4 bg-green-500">Course Completed!</Badge>
-            <h1 className="text-4xl font-bold mb-4">Congratulations!</h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">
-              You have successfully completed the Web Development Fundamentals course.
-            </p>
-          </div>
-          <CertificateGenerator certificateData={certificateData} />
-          <div className="text-center mt-8">
-            <Button onClick={() => setShowCertificate(false)} variant="outline" className="bg-transparent">
-              Back to Course
-            </Button>
-          </div>
-        </div>
-      </div>
+      <CertificateGenerator
+        courseName="Web Development Fundamentals"
+        studentName="Student"
+        completionDate={new Date().toLocaleDateString()}
+        onClose={() => setShowCertificate(false)}
+      />
     )
   }
 
   if (showFinalSurvey) {
     return (
       <FinalSurvey
-        courseId="web-development-fundamentals"
-        courseName="Web Development Fundamentals"
-        questions={finalSurveyQuestions}
-        onBack={() => setShowFinalSurvey(false)}
+        courseTitle="Web Development Fundamentals"
         onComplete={handleFinalSurveyComplete}
+        onClose={() => setShowFinalSurvey(false)}
       />
     )
   }
 
-  if (showSurvey && currentModuleData) {
+  if (showModuleSurvey) {
     return (
-      <ModuleSurvey module={currentModuleData} onComplete={handleSurveyComplete} onBack={() => setShowSurvey(false)} />
+      <ModuleSurvey
+        moduleTitle={courseModules[currentModule - 1].title}
+        onComplete={handleModuleSurveyComplete}
+        onClose={() => setShowModuleSurvey(false)}
+      />
     )
   }
 
   return (
-    <div className="min-h-screen py-16 px-4 md:px-12 lg:px-24">
+    <div className="min-h-screen py-8 px-4 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <Badge className="mb-4 bg-green-500 animate-pulse">Access Granted</Badge>
-          <h1 className="text-4xl font-bold mb-4">Web Development Fundamentals</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">Complete Tutorial & Resources</p>
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-bold">Web Development Fundamentals</h1>
+            <Badge variant="secondary" className="text-sm">
+              <BookOpen className="h-4 w-4 mr-1" />
+              {completedModules.length}/{courseModules.length} Modules
+            </Badge>
+          </div>
 
-          <div className="max-w-md mx-auto mb-6">
-            <div className="flex justify-between text-sm mb-2">
+          <div className="mb-4">
+            <div className="flex justify-between text-sm text-gray-600 mb-2">
               <span>Course Progress</span>
-              <span>{Math.round(progress)}%</span>
+              <span>{Math.round(progress)}% Complete</span>
             </div>
             <Progress value={progress} className="h-2" />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            <Card className="card-hover">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-1">
+            <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Play className="h-5 w-5 mr-2" />
-                  Module {currentModule}: {currentModuleData?.title}
-                </CardTitle>
+                <CardTitle className="text-lg">Course Modules</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">{currentModuleData?.content.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">{currentModuleData?.content.description}</p>
-                </div>
-
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">What You'll Learn:</h4>
-                  <ul className="space-y-1 text-sm">
-                    {currentModuleData?.content.learningObjectives.map((objective, index) => (
-                      <li key={index} className="flex items-center">
-                        <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                        {objective}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="space-y-6">
-                  {currentModuleData?.content.steps.map((step, index) => (
-                    <div key={index} className="border-l-4 border-blue-500 pl-4">
-                      <h4 className="font-semibold mb-2">{step.title}</h4>
-                      <p className="text-gray-600 dark:text-gray-300 mb-3">{step.content}</p>
-                      {step.tips && (
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg">
-                          <h5 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-1">💡 Pro Tip:</h5>
-                          <p className="text-yellow-700 dark:text-yellow-300 text-sm">{step.tips}</p>
-                        </div>
-                      )}
+              <CardContent className="space-y-2">
+                {courseModules.map((module) => (
+                  <div
+                    key={module.id}
+                    className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                      currentModule === module.id
+                        ? "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    }`}
+                    onClick={() => setCurrentModule(module.id)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        {completedModules.includes(module.id) ? (
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                        ) : currentModule === module.id ? (
+                          <Play className="h-4 w-4 text-blue-500" />
+                        ) : (
+                          <div className="h-4 w-4 rounded-full border-2 border-gray-300" />
+                        )}
+                        <span className="text-sm font-medium">Module {module.id}</span>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    <p className="text-xs text-gray-600 mt-1 ml-6">{module.title}</p>
+                  </div>
+                ))}
 
-                <div className="flex justify-between pt-6 border-t">
-                  <Button
-                    variant="outline"
-                    onClick={handlePreviousModule}
-                    disabled={currentModule === 1}
-                    className="btn-hover bg-transparent"
-                  >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Previous Module
-                  </Button>
-
-                  <Button
-                    onClick={handleNextModule}
-                    disabled={isLoadingFinalAssessment || (currentModule === modules.length && !allModulesCompleted)}
-                    className="btn-primary btn-hover"
-                  >
-                    {isLoadingFinalAssessment ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Loading...
-                      </>
-                    ) : currentModule === modules.length && allModulesCompleted ? (
-                      "Take Final Assessment"
+                <div
+                  className={`p-3 rounded-lg border ${
+                    allModulesCompleted
+                      ? "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
+                      : "bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    {finalSurveyPassed ? (
+                      <Award className="h-4 w-4 text-yellow-500" />
+                    ) : allModulesCompleted ? (
+                      <CheckCircle className="h-4 w-4 text-green-500" />
                     ) : (
-                      "Next Module"
+                      <Lock className="h-4 w-4 text-gray-400" />
                     )}
-                    {!isLoadingFinalAssessment && <ArrowRight className="h-4 w-4 ml-2" />}
-                  </Button>
+                    <span className="text-sm font-medium">Final Assessment</span>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 ml-6">
+                    {finalSurveyPassed ? "Completed" : allModulesCompleted ? "Available" : "Complete all modules first"}
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          <div className="space-y-6">
-            <Card className="card-hover">
+          <div className="lg:col-span-3">
+            <Card>
               <CardHeader>
-                <CardTitle>Course Progress</CardTitle>
+                <CardTitle className="flex items-center justify-between">
+                  <span>
+                    Module {currentModule}: {courseModules[currentModule - 1].title}
+                  </span>
+                  <Badge variant="outline">{courseModules[currentModule - 1].duration}</Badge>
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {modules.map((module) => (
-                    <div key={module.id} className="flex items-center justify-between">
-                      <button
-                        onClick={() => {
-                          setCurrentModule(module.id)
-                          setShowSurvey(false)
-                        }}
-                        className={`text-sm text-left hover:text-blue-500 transition-colors ${
-                          currentModule === module.id ? "text-blue-500 font-medium" : ""
-                        }`}
-                      >
-                        Module {module.id}: {module.title}
-                      </button>
-                      {completedModules.includes(module.id) ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                      ) : currentModule === module.id ? (
-                        <div className="w-4 h-4 border-2 border-blue-500 rounded-full animate-pulse" />
-                      ) : (
-                        <div className="w-4 h-4 border-2 border-gray-300 rounded-full" />
+                <Tabs defaultValue="content" className="space-y-6">
+                  <TabsList>
+                    <TabsTrigger value="content">Content</TabsTrigger>
+                    <TabsTrigger value="resources">Resources</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="content" className="space-y-6">
+                    <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <Play className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+                        <p className="text-gray-600 dark:text-gray-300">Video Player</p>
+                        <p className="text-sm text-gray-500">{courseModules[currentModule - 1].videoUrl}</p>
+                      </div>
+                    </div>
+
+                    <div className="prose dark:prose-invert max-w-none">
+                      <p>{courseModules[currentModule - 1].content}</p>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-6 border-t">
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => setCurrentModule(Math.max(1, currentModule - 1))}
+                          disabled={currentModule === 1}
+                        >
+                          Previous Module
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setCurrentModule(Math.min(courseModules.length, currentModule + 1))}
+                          disabled={currentModule === courseModules.length}
+                        >
+                          Next Module
+                        </Button>
+                      </div>
+
+                      {!completedModules.includes(currentModule) && (
+                        <Button onClick={handleCompleteModule}>Complete Module</Button>
                       )}
                     </div>
-                  ))}
-                </div>
+                  </TabsContent>
+
+                  <TabsContent value="resources">
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Module Resources</h3>
+                      <div className="grid gap-3">
+                        {courseModules[currentModule - 1].resources.map((resource, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                            <span>{resource}</span>
+                            <Button size="sm" variant="outline">
+                              Download
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
 
-            <Card className="card-hover">
-              <CardHeader>
-                <CardTitle>Resources</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button variant="outline" size="sm" className="w-full justify-start bg-transparent btn-hover">
-                  <Download className="h-4 w-4 mr-2" />
-                  HTML5 Cheat Sheet
-                </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start bg-transparent btn-hover">
-                  <Download className="h-4 w-4 mr-2" />
-                  CSS3 Reference
-                </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start bg-transparent btn-hover">
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  MDN Web Docs
-                </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start bg-transparent btn-hover">
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Can I Use
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="card-hover">
-              <CardHeader>
-                <CardTitle>Need Help?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">Have questions about this course?</p>
-                <Button size="sm" className="w-full btn-hover">
-                  <Mail className="h-4 w-4 mr-2" />
-                  Contact Support
-                </Button>
-              </CardContent>
-            </Card>
-
-            {allModulesCompleted && (
-              <Card className="card-hover border-green-200 dark:border-green-800">
+            {allModulesCompleted && !finalSurveyPassed && (
+              <Card className="mt-6">
                 <CardHeader>
-                  <CardTitle className="text-green-600 dark:text-green-400">Ready for Assessment!</CardTitle>
+                  <CardTitle className="flex items-center">
+                    <Award className="h-5 w-5 mr-2" />
+                    Final Assessment
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                    You've completed all modules. Take the final assessment to get your certificate!
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                    Congratulations on completing all modules! Take the final assessment to receive your certificate.
                   </p>
-                  <Button
-                    onClick={() => {
-                      setIsLoadingFinalAssessment(true)
-                      setTimeout(() => {
-                        setIsLoadingFinalAssessment(false)
-                        setShowFinalSurvey(true)
-                      }, 1500)
-                    }}
-                    disabled={isLoadingFinalAssessment}
-                    size="sm"
-                    className="w-full btn-hover"
-                  >
-                    {isLoadingFinalAssessment ? (
+                  <Button onClick={handleTakeFinalAssessment} disabled={isLoadingAssessment} className="w-full">
+                    {isLoadingAssessment ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Loading...
+                        Loading Assessment...
                       </>
                     ) : (
-                      <>
-                        <Award className="h-4 w-4 mr-2" />
-                        Take Final Assessment
-                      </>
+                      "Take Final Assessment"
                     )}
                   </Button>
                 </CardContent>

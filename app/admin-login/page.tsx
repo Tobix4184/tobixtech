@@ -1,12 +1,14 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Shield, Lock } from "lucide-react"
+import { Shield, Lock, Loader2 } from "lucide-react"
 
 export default function AdminLogin() {
   const [step, setStep] = useState(1)
@@ -29,7 +31,7 @@ export default function AdminLogin() {
     setIsValidating(true)
 
     try {
-      const response = await fetch("/api/admin-auth", {
+      const response = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: 1, pin: pin1 }),
@@ -37,7 +39,7 @@ export default function AdminLogin() {
 
       const data = await response.json()
 
-      if (data.valid) {
+      if (response.ok && data.success) {
         setStep(2)
         toast({
           title: "Step 1 Complete",
@@ -46,14 +48,14 @@ export default function AdminLogin() {
       } else {
         toast({
           title: "Invalid PIN",
-          description: "The first PIN is incorrect",
+          description: data.message || "The first PIN is incorrect",
           variant: "destructive",
         })
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong",
+        title: "Connection Error",
+        description: "Unable to connect to authentication server",
         variant: "destructive",
       })
     } finally {
@@ -74,7 +76,7 @@ export default function AdminLogin() {
     setIsValidating(true)
 
     try {
-      const response = await fetch("/api/admin-auth", {
+      const response = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: 2, pin1, pin2 }),
@@ -82,18 +84,23 @@ export default function AdminLogin() {
 
       const data = await response.json()
 
-      if (data.valid) {
+      if (response.ok && data.success) {
+        // Store admin token securely
+        localStorage.setItem("admin_token", data.token)
+        localStorage.setItem("admin_expires", data.expires)
+
         toast({
           title: "Access Granted",
-          description: "Redirecting to admin dashboard...",
+          description: "Welcome to TobixTech Admin Dashboard",
         })
+
         setTimeout(() => {
-          router.push("/Adminpage")
+          router.push("/admin-dashboard")
         }, 1000)
       } else {
         toast({
           title: "Access Denied",
-          description: "Invalid PIN combination",
+          description: data.message || "Invalid PIN combination",
           variant: "destructive",
         })
         setStep(1)
@@ -102,8 +109,8 @@ export default function AdminLogin() {
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong",
+        title: "Connection Error",
+        description: "Unable to connect to authentication server",
         variant: "destructive",
       })
     } finally {
@@ -111,23 +118,31 @@ export default function AdminLogin() {
     }
   }
 
+  const handleKeyPress = (e: React.KeyboardEvent, action: () => void) => {
+    if (e.key === "Enter") {
+      action()
+    }
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield className="h-8 w-8 text-blue-500" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 px-4">
+      <Card className="w-full max-w-md shadow-xl border-0 bg-white/80 backdrop-blur-sm dark:bg-slate-900/80">
+        <CardHeader className="text-center pb-2">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <Shield className="h-10 w-10 text-white" />
           </div>
-          <CardTitle className="text-2xl">Admin Access</CardTitle>
-          <p className="text-gray-600 dark:text-gray-300">
+          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            TobixTech Admin
+          </CardTitle>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Step {step} of 2: Enter {step === 1 ? "first" : "second"} PIN
           </p>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6 pt-4">
           {step === 1 ? (
             <>
-              <div>
-                <label htmlFor="pin1" className="block text-sm font-medium mb-2">
+              <div className="space-y-2">
+                <label htmlFor="pin1" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                   First PIN (6 digits)
                 </label>
                 <Input
@@ -136,18 +151,32 @@ export default function AdminLogin() {
                   placeholder="••••••"
                   value={pin1}
                   onChange={(e) => setPin1(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onKeyPress={(e) => handleKeyPress(e, handleStep1)}
                   maxLength={6}
-                  className="text-center text-lg tracking-widest"
+                  className="text-center text-xl tracking-[0.5em] h-14 border-2 focus:border-blue-500 transition-colors"
+                  disabled={isValidating}
+                  autoFocus
                 />
               </div>
-              <Button onClick={handleStep1} disabled={isValidating || pin1.length !== 6} className="w-full">
-                {isValidating ? "Validating..." : "Continue"}
+              <Button
+                onClick={handleStep1}
+                disabled={isValidating || pin1.length !== 6}
+                className="w-full h-12 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold shadow-lg transition-all duration-200"
+              >
+                {isValidating ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Validating...
+                  </>
+                ) : (
+                  "Continue to Step 2"
+                )}
               </Button>
             </>
           ) : (
             <>
-              <div>
-                <label htmlFor="pin2" className="block text-sm font-medium mb-2">
+              <div className="space-y-2">
+                <label htmlFor="pin2" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Second PIN (6 digits)
                 </label>
                 <Input
@@ -156,29 +185,44 @@ export default function AdminLogin() {
                   placeholder="••••••"
                   value={pin2}
                   onChange={(e) => setPin2(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onKeyPress={(e) => handleKeyPress(e, handleStep2)}
                   maxLength={6}
-                  className="text-center text-lg tracking-widest"
+                  className="text-center text-xl tracking-[0.5em] h-14 border-2 focus:border-blue-500 transition-colors"
+                  disabled={isValidating}
+                  autoFocus
                 />
               </div>
-              <div className="flex space-x-2">
+              <div className="flex space-x-3">
                 <Button
                   variant="outline"
                   onClick={() => {
                     setStep(1)
                     setPin2("")
                   }}
-                  className="flex-1"
+                  disabled={isValidating}
+                  className="flex-1 h-12 border-2 hover:bg-gray-50 dark:hover:bg-slate-800"
                 >
-                  Back
+                  Back to Step 1
                 </Button>
-                <Button onClick={handleStep2} disabled={isValidating || pin2.length !== 6} className="flex-1">
-                  {isValidating ? "Validating..." : "Access Dashboard"}
+                <Button
+                  onClick={handleStep2}
+                  disabled={isValidating || pin2.length !== 6}
+                  className="flex-1 h-12 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold shadow-lg"
+                >
+                  {isValidating ? (
+                    <>
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      Verifying...
+                    </>
+                  ) : (
+                    "Access Dashboard"
+                  )}
                 </Button>
               </div>
             </>
           )}
 
-          <div className="flex items-center justify-center pt-4">
+          <div className="flex items-center justify-center pt-4 border-t border-gray-200 dark:border-gray-700">
             <Lock className="h-4 w-4 text-gray-400 mr-2" />
             <span className="text-sm text-gray-500">Secure Admin Portal</span>
           </div>

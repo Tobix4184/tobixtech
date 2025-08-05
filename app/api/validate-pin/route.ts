@@ -1,52 +1,56 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-// Store PINs securely - in production, use environment variables or database
-const COURSE_PINS = {
-  "meta-facebook-ads": ["46418", "29485", "52887"],
-  "web-development-fundamentals": ["78901", "23456", "67890"],
-  "react-nextjs-bootcamp": ["11223", "44556", "77889"],
-}
-
 export async function POST(request: NextRequest) {
   try {
-    const { courseId, pin } = await request.json()
+    const { courseId, pin, deviceId } = await request.json()
 
-    // Validate input
-    if (!courseId || !pin) {
-      return NextResponse.json({ valid: false, message: "Missing courseId or pin" }, { status: 400 })
+    // Validate required fields
+    if (!courseId || !pin || !deviceId) {
+      return NextResponse.json({ valid: false, message: "Course ID, PIN, and device ID are required" }, { status: 400 })
     }
 
-    // Check if course exists
-    const validPins = COURSE_PINS[courseId as keyof typeof COURSE_PINS]
-    if (!validPins) {
-      return NextResponse.json({ valid: false, message: "Invalid course" }, { status: 400 })
+    // Validate PIN format (5 digits)
+    if (!/^\d{5}$/.test(pin)) {
+      return NextResponse.json({ valid: false, message: "PIN must be exactly 5 digits" }, { status: 400 })
     }
 
-    // Validate PIN
-    const isValid = validPins.includes(pin)
+    // Forward request to backend API
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
 
-    if (isValid) {
-      // Create response with secure cookie
-      const response = NextResponse.json({ valid: true })
+    const response = await fetch(`${backendUrl}/api/pins/validate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "TobixTech-Frontend/1.0",
+      },
+      body: JSON.stringify({
+        courseId,
+        pin,
+        deviceId,
+      }),
+    })
 
-      // Set secure cookie for course access (24 hours)
-      response.cookies.set("course-access", `${courseId}-${pin}`, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 86400, // 24 hours
-        path: "/",
-      })
-
-      return response
-    } else {
-      return NextResponse.json({
-        valid: false,
-        message: "Invalid PIN",
-      })
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ message: "PIN validation failed" }))
+      return NextResponse.json(
+        { valid: false, message: errorData.message || "PIN validation failed" },
+        { status: response.status },
+      )
     }
+
+    const data = await response.json()
+
+    return NextResponse.json({
+      valid: data.valid || false,
+      message: data.message || "PIN validation completed",
+      courseId: data.courseId || courseId,
+      deviceLinked: data.deviceLinked || false,
+    })
   } catch (error) {
     console.error("PIN validation error:", error)
-    return NextResponse.json({ valid: false, message: "Server error" }, { status: 500 })
+    return NextResponse.json(
+      { valid: false, message: "PIN validation service temporarily unavailable" },
+      { status: 500 },
+    )
   }
 }

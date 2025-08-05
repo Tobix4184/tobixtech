@@ -124,7 +124,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
-          <div className="min-h-screen bg-background">
+          <div className="min-h-screen bg-background text-foreground">
             <Navigation />
             <main className="pt-16">{children}</main>
             <Footer />
