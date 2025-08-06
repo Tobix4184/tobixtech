@@ -1,223 +1,288 @@
-# TobixTech Platform 🚀
+# TobixTech Educational Platform
 
-> Professional Educational Platform for Web Development & Digital Marketing Training
+A comprehensive educational platform built with Next.js 15, featuring course management, user authentication, blog system, and admin dashboard.
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.0.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-Production-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
+## 🚀 Features
 
-## ✨ Features
+- **Modern Tech Stack**: Built with Next.js 15, TypeScript, and Tailwind CSS
+- **Course Management**: Complete course system with PIN-based access
+- **User Authentication**: Secure JWT-based authentication system
+- **Admin Dashboard**: Comprehensive admin panel for content management
+- **Blog System**: Full-featured blog with content management
+- **Responsive Design**: Mobile-first responsive design
+- **Dark Mode**: Built-in dark/light theme support
+- **Certificate Generation**: Automated certificate generation for course completion
+- **Tutor Applications**: System for managing tutor applications
 
-- 🎨 **Modern UI/UX** - Built with Tailwind CSS and shadcn/ui components
-- 📱 **Fully Responsive** - Optimized for all devices and screen sizes  
-- 🌙 **Dark/Light Mode** - Seamless theme switching
-- 🔒 **Secure Admin Panel** - Two-step PIN authentication system
-- 📚 **Course Management** - PIN-based course access with device binding
-- 🏆 **Certificate Generation** - Automated PDF certificates upon completion
-- 📊 **Admin Dashboard** - Complete content management system
-- 🔍 **SEO Optimized** - Built-in SEO best practices and structured data
-- ⚡ **Performance First** - Optimized for Core Web Vitals
-- 🛡️ **Type Safe** - Full TypeScript implementation
+## 🛠️ Tech Stack
 
-## 🚀 Quick Start
+### Frontend
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Icons**: Lucide React
+- **Theme**: next-themes
+
+### Backend Integration
+- **API**: RESTful API endpoints
+- **Authentication**: JWT tokens
+- **Database**: MongoDB (via backend service)
+- **File Storage**: Local/Cloud storage support
+
+## 📦 Installation
 
 ### Prerequisites
-
 - Node.js 18+ 
-- npm or yarn
-- Git
+- npm/yarn/pnpm
+- Backend service running (see BACKEND_DEVELOPMENT_PROMPT.md)
 
-### Installation
+### Frontend Setup
 
-1. **Clone the repository:**
+1. **Clone the repository**
    \`\`\`bash
-   git clone https://github.com/yourusername/tobixtech-platform.git
+   git clone <repository-url>
    cd tobixtech-platform
    \`\`\`
 
-2. **Install dependencies:**
+2. **Install dependencies**
    \`\`\`bash
    npm install
+   # or
+   yarn install
+   # or
+   pnpm install
    \`\`\`
 
-3. **Set up environment variables:**
-   \`\`\`bash
-   cp .env.example .env.local
-   \`\`\`
-   
-   Add your environment variables:
+3. **Environment Configuration**
+   Create a `.env.local` file in the root directory:
    \`\`\`env
+   # JWT Secret (must match backend)
+   JWT_SECRET=your-super-secure-jwt-secret-key-here
+   
+   # Backend URL
    BACKEND_URL=http://localhost:5000
-   JWT_SECRET=your-generated-jwt-secret
+   
+   # Next.js Configuration
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
    \`\`\`
 
-4. **Run the development server:**
+4. **Start the development server**
    \`\`\`bash
    npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
    \`\`\`
 
-5. **Open your browser:**
+5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📁 Project Structure
+## 🏗️ Project Structure
 
 \`\`\`
 tobixtech-platform/
 ├── app/                          # Next.js App Router
 │   ├── (routes)/                 # Route groups
 │   │   ├── about/               # About page
-│   │   ├── courses/             # Course pages
+│   │   ├── blog/                # Blog system
 │   │   ├── contact/             # Contact page
-│   │   └── blog/                # Blog system
+│   │   ├── courses/             # Course pages
+│   │   ├── projects/            # Projects showcase
+│   │   └── skills/              # Skills page
 │   ├── admin-dashboard/         # Admin panel
 │   ├── admin-login/             # Admin authentication
 │   ├── api/                     # API routes
+│   │   ├── admin/               # Admin API endpoints
+│   │   ├── course-reviews/      # Course review API
+│   │   ├── tutor-application/   # Tutor application API
+│   │   └── validate-pin/        # PIN validation API
 │   ├── globals.css              # Global styles
-│   └── layout.tsx               # Root layout
+│   ├── layout.tsx               # Root layout
+│   └── page.tsx                 # Home page
 ├── components/                   # Reusable components
 │   ├── ui/                      # shadcn/ui components
-│   ├── navigation.tsx           # Main navigation
-│   ├── footer.tsx               # Site footer
-│   └── theme-provider.tsx       # Theme management
-├── data/                        # Static data files
-│   ├── courses.json             # Course information
-│   ├── blog-posts.json          # Blog content
-│   └── users.json               # User data
-├── lib/                         # Utility functions
+│   ├── certificate-generator.tsx
+│   ├── course-card.tsx
+│   ├── course-reviews.tsx
+│   ├── final-survey.tsx
+│   ├── footer.tsx
+│   ├── language-switcher.tsx
+│   ├── module-survey.tsx
+│   ├── navigation.tsx
+│   ├── theme-provider.tsx
+│   └── theme-toggle.tsx
 ├── hooks/                       # Custom React hooks
-└── public/                      # Static assets
+├── lib/                         # Utility functions
+├── data/                        # Static data files
+├── public/                      # Static assets
+└── middleware.ts                # Next.js middleware
 \`\`\`
 
-## 🔧 Key Components
+## 🔧 Configuration
 
-### Course Management System
-- **PIN-based Access**: Secure 5-digit PIN system for course enrollment
-- **Device Binding**: Each PIN works on only one device for security
-- **Progress Tracking**: Module completion and progress monitoring
-- **Certificate Generation**: Automated PDF certificates upon course completion
+### Environment Variables
 
-### Admin Dashboard
-- **Two-Step Authentication**: Dual PIN security system
-- **Content Management**: Full CRUD operations for courses, users, and content
-- **Analytics**: Student progress and platform statistics
-- **PIN Management**: Generate and manage course access PINs
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `JWT_SECRET` | Secret key for JWT token verification | Yes |
+| `BACKEND_URL` | URL of the backend API service | Yes |
+| `NEXT_PUBLIC_APP_URL` | Public URL of the frontend app | No |
 
-### Modern Tech Stack
-- **Next.js 15**: Latest App Router with server components
-- **TypeScript**: Full type safety and better developer experience
-- **Tailwind CSS**: Utility-first CSS framework
-- **shadcn/ui**: High-quality, accessible component library
-- **Lucide Icons**: Beautiful, customizable icons
+### Backend Integration
+
+This frontend requires a backend service to be running. See `BACKEND_DEVELOPMENT_PROMPT.md` for detailed backend setup instructions.
+
+**Key Integration Points:**
+- User authentication and management
+- Course content delivery
+- PIN validation system
+- Blog post management
+- Admin dashboard functionality
+
+## 📚 Usage
+
+### For Students
+1. **Browse Courses**: View available courses on the courses page
+2. **Course Access**: Use provided PINs to access course content
+3. **Progress Tracking**: Track your learning progress through modules
+4. **Certificates**: Generate certificates upon course completion
+5. **Reviews**: Leave reviews and ratings for completed courses
+
+### For Administrators
+1. **Admin Login**: Access admin panel at `/admin-login`
+2. **User Management**: View and manage registered users
+3. **Course Management**: Create, edit, and manage courses
+4. **PIN Management**: Generate and manage course access PINs
+5. **Blog Management**: Create and publish blog posts
+6. **Tutor Applications**: Review and manage tutor applications
+
+### For Tutors
+1. **Application**: Apply to become a tutor via `/become-tutor`
+2. **Course Creation**: Create courses through the admin system
+3. **Student Interaction**: Engage with students through the platform
 
 ## 🎨 Customization
 
 ### Theming
-The platform supports both light and dark themes with CSS custom properties:
+The platform supports both light and dark themes using `next-themes`. Customize colors in:
+- `tailwind.config.js` - Tailwind configuration
+- `app/globals.css` - CSS custom properties
 
-\`\`\`css
-:root {
-  --primary: 221.2 83.2% 53.3%;
-  --secondary: 210 40% 96%;
-  --background: 0 0% 100%;
-  /* ... more variables */
-}
-\`\`\`
+### Components
+All UI components are built with shadcn/ui and can be customized:
+- Modify existing components in `components/ui/`
+- Create new components following the established patterns
+- Update styling using Tailwind CSS classes
 
-### Component Customization
-All components are built with Tailwind CSS and can be easily customized:
+### Content
+- **Static Content**: Update content in page components
+- **Dynamic Content**: Managed through the backend API
+- **Images**: Store in `public/` directory or use external URLs
 
-\`\`\`tsx
-// Example: Customizing a button
-<Button 
-  variant="default" 
-  size="lg" 
-  className="bg-gradient-to-r from-blue-500 to-purple-600"
->
-  Custom Button
-</Button>
-\`\`\`
-
-## 📊 Performance
-
-The platform is optimized for maximum performance:
-
-- ⚡ **Lighthouse Score**: 95+ across all metrics
-- 🚀 **Core Web Vitals**: All green scores
-- 📱 **Mobile First**: Responsive design principles
-- 🖼️ **Image Optimization**: Next.js automatic image optimization
-- 📦 **Bundle Size**: Optimized with tree shaking and code splitting
-
-## 🔒 Security Features
-
-- **Two-Step Admin Authentication**: Dual PIN security system
-- **JWT Token Management**: Secure session handling
-- **Device Binding**: Prevent PIN sharing across devices
-- **Rate Limiting**: Protection against brute force attacks
-- **Input Validation**: Server-side validation for all inputs
-- **CORS Protection**: Proper cross-origin request handling
-
-## 🌐 Deployment
+## 🚀 Deployment
 
 ### Vercel (Recommended)
-
-1. **Push to GitHub:**
-   \`\`\`bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   \`\`\`
-
-2. **Deploy to Vercel:**
-   - Connect your GitHub repository
-   - Set environment variables
-   - Deploy automatically
-
-3. **Environment Variables:**
-   \`\`\`env
-   BACKEND_URL=https://your-backend.fly.dev
-   JWT_SECRET=your-generated-jwt-secret
-   \`\`\`
+1. **Connect Repository**: Link your GitHub repository to Vercel
+2. **Environment Variables**: Set required environment variables in Vercel dashboard
+3. **Deploy**: Automatic deployment on every push to main branch
 
 ### Manual Deployment
-
-1. **Build the project:**
+1. **Build the application**
    \`\`\`bash
    npm run build
    \`\`\`
 
-2. **Start production server:**
+2. **Start production server**
    \`\`\`bash
    npm start
    \`\`\`
 
-## 🧪 Testing
-
-\`\`\`bash
-# Run type checking
-npm run type-check
-
-# Run linting
-npm run lint
-
-# Build test
-npm run build
+### Environment Setup for Production
+\`\`\`env
+JWT_SECRET=your-production-jwt-secret
+BACKEND_URL=https://your-backend-domain.com
+NEXT_PUBLIC_APP_URL=https://your-frontend-domain.com
 \`\`\`
 
-## 📚 Documentation
+## 🔒 Security
 
-- **[Deployment Guide](./EDITING_GUIDE.md)** - Complete deployment instructions
-- **[Backend Setup](./BACKEND_DEVELOPMENT_PROMPT.md)** - Backend development guide
-- **[Component Documentation](./components/)** - Individual component docs
-- **[API Documentation](./app/api/)** - API endpoints documentation
+- **JWT Authentication**: Secure admin routes with JWT tokens
+- **Input Validation**: All forms include client-side validation
+- **CORS Protection**: Configured for specific origins
+- **Environment Variables**: Sensitive data stored in environment variables
+- **Middleware Protection**: Admin routes protected by authentication middleware
+
+## 🧪 Testing
+
+### Running Tests
+\`\`\`bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+\`\`\`
+
+### Test Structure
+- **Unit Tests**: Component and utility function tests
+- **Integration Tests**: API endpoint tests
+- **E2E Tests**: Full user journey tests
+
+## 📈 Performance
+
+### Optimization Features
+- **Next.js App Router**: Optimized routing and rendering
+- **Image Optimization**: Automatic image optimization
+- **Code Splitting**: Automatic code splitting for better performance
+- **Static Generation**: Static generation where possible
+- **Caching**: Proper caching headers and strategies
+
+### Performance Monitoring
+- Monitor Core Web Vitals
+- Use Next.js built-in analytics
+- Implement error tracking
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Fork the repository**
+2. **Create a feature branch**
+   \`\`\`bash
+   git checkout -b feature/amazing-feature
+   \`\`\`
+3. **Commit your changes**
+   \`\`\`bash
+   git commit -m 'Add some amazing feature'
+   \`\`\`
+4. **Push to the branch**
+   \`\`\`bash
+   git push origin feature/amazing-feature
+   \`\`\`
+5. **Open a Pull Request**
+
+### Development Guidelines
+- Follow TypeScript best practices
+- Use ESLint and Prettier for code formatting
+- Write tests for new features
+- Update documentation as needed
+- Follow the existing code style and patterns
+
+## 📞 Support
+
+### Getting Help
+- **Documentation**: Check this README and inline code comments
+- **Issues**: Create GitHub issues for bugs and feature requests
+- **Discussions**: Use GitHub Discussions for questions and ideas
+
+### Common Issues
+1. **Build Errors**: Ensure all environment variables are set
+2. **API Connection**: Verify backend service is running
+3. **Authentication**: Check JWT secret matches between frontend and backend
+4. **CORS Issues**: Verify CORS configuration in backend
 
 ## 📄 License
 
@@ -225,20 +290,34 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [Next.js](https://nextjs.org/) for the amazing React framework
-- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
-- [shadcn/ui](https://ui.shadcn.com/) for the beautiful component library
-- [Lucide](https://lucide.dev/) for the icon set
-- [Vercel](https://vercel.com/) for hosting and deployment
+- **Next.js Team**: For the amazing framework
+- **Vercel**: For hosting and deployment platform
+- **shadcn/ui**: For the beautiful UI components
+- **Tailwind CSS**: For the utility-first CSS framework
+- **Open Source Community**: For the countless libraries and tools
 
-## 📞 Support
+## 📊 Project Status
 
-- **Email**: support@tobixtech.com
-- **Documentation**: [Full Documentation](./docs/)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/tobixtech-platform/issues)
+- ✅ **Frontend**: Complete and production-ready
+- 🔄 **Backend**: Requires setup (see BACKEND_DEVELOPMENT_PROMPT.md)
+- ✅ **Authentication**: JWT-based system implemented
+- ✅ **Course System**: PIN-based access system
+- ✅ **Admin Dashboard**: Full admin functionality
+- ✅ **Blog System**: Content management system
+- ✅ **Responsive Design**: Mobile-first approach
+- ✅ **Dark Mode**: Theme switching support
+
+## 🔮 Future Enhancements
+
+- **Real-time Chat**: Student-tutor communication
+- **Video Streaming**: Integrated video player
+- **Payment Integration**: Course purchase system
+- **Mobile App**: React Native mobile application
+- **Advanced Analytics**: Detailed learning analytics
+- **AI Integration**: Personalized learning recommendations
+- **Multi-language**: Internationalization support
+- **Offline Mode**: Progressive Web App features
 
 ---
 
 **Built with ❤️ by the TobixTech Team**
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/tobixtech-platform)

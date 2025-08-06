@@ -377,186 +377,347 @@ Once you've completed all personalization sections above, your TobixTech platfor
 4. Use browser developer tools to debug issues
 
 **Happy teaching! 📚🚀**
+
+---
+
+# TobixTech Platform Editing Guide
+
+This guide provides comprehensive instructions for editing and maintaining the TobixTech educational platform.
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- Backend service running (see BACKEND_DEVELOPMENT_PROMPT.md)
+- Environment variables configured
+
+### Development Setup
+1. Clone and install dependencies
+2. Set up environment variables
+3. Start backend service
+4. Run `npm run dev`
+
+## 📁 Project Structure Overview
+
+\`\`\`
+tobixtech-platform/
+├── app/                     # Next.js App Router
+├── components/              # Reusable components
+├── hooks/                   # Custom React hooks
+├── lib/                     # Utility functions
+├── data/                    # Static data files
+├── public/                  # Static assets
+└── middleware.ts            # Authentication middleware
 \`\`\`
 
-```plaintext file=".gitignore"
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+## 🎯 Common Editing Tasks
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
+### 1. Adding New Courses
 
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
+**Step 1: Backend Data**
+Add course data to your backend database following the schema in `BACKEND_DEVELOPMENT_PROMPT.md`.
 
-# nyc test coverage
-.nyc_output
+**Step 2: Course Page (Optional)**
+Create a dedicated course page:
+\`\`\`bash
+# Create new course page
+mkdir app/courses/[new-course-id]
+touch app/courses/[new-course-id]/page.tsx
+\`\`\`
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
+**Step 3: Course Content Page**
+Create course content page:
+\`\`\`bash
+mkdir app/courses/[new-course-id]/content
+touch app/courses/[new-course-id]/content/page.tsx
+\`\`\`
 
-# Bower dependency directory (https://bower.io/)
-bower_components
+### 2. Modifying Navigation
 
-# node-waf configuration
-.lock-wscript
+Edit `components/navigation.tsx`:
+\`\`\`typescript
+const navigation = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Courses", href: "/courses" },
+  // Add new navigation items here
+  { name: "New Page", href: "/new-page" },
+]
+\`\`\`
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+### 3. Updating Homepage Content
 
-# Dependency directories
-node_modules/
-jspm_packages/
+Edit `app/page.tsx`:
+- Hero section content
+- Features section
+- Call-to-action sections
 
-# Snowpack dependency directory (https://snowpack.dev/)
-web_modules/
+### 4. Adding New Blog Posts
 
-# TypeScript cache
-*.tsbuildinfo
+Blog posts are managed through the backend API and admin dashboard. Use the admin panel at `/admin-dashboard` to create new posts.
 
-# Optional npm cache directory
-.npm
+### 5. Customizing Themes
 
-# Optional eslint cache
-.eslintcache
+**Colors**: Edit `tailwind.config.js` and `app/globals.css`
+**Components**: Modify components in `components/ui/`
 
-# Optional stylelint cache
-.stylelintcache
+## 🔧 Component Editing
 
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
+### UI Components
+All UI components are in `components/ui/` and follow shadcn/ui patterns:
+- `Button`, `Card`, `Dialog`, etc.
+- Fully customizable with Tailwind CSS
+- TypeScript support included
 
-# Optional REPL history
-.node_repl_history
+### Custom Components
+- `Navigation`: Main navigation bar
+- `Footer`: Site footer
+- `CourseCard`: Course display component
+- `CertificateGenerator`: Certificate creation
+- `ThemeToggle`: Dark/light mode switcher
 
-# Output of 'npm pack'
-*.tgz
+## 🎨 Styling Guide
 
-# Yarn Integrity file
-.yarn-integrity
+### Tailwind CSS Classes
+\`\`\`css
+/* Primary colors */
+bg-primary text-primary-foreground
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+/* Secondary colors */
+bg-secondary text-secondary-foreground
 
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
+/* Muted colors */
+bg-muted text-muted-foreground
 
-# Next.js build output
-.next
-out/
+/* Destructive colors */
+bg-destructive text-destructive-foreground
+\`\`\`
 
-# Nuxt.js build / generate output
-.nuxt
-dist
+### Dark Mode Support
+All components support dark mode automatically through CSS variables defined in `app/globals.css`.
 
-# Gatsby files
-.cache/
-# Comment in the public line in if your project uses Gatsby and not Next.js
-# https://nextjs.org/blog/next-9-1#public-directory-support
-# public
+## 🔐 Authentication System
 
-# vuepress build output
-.vuepress/dist
+### Admin Authentication
+- Login: `/admin-login`
+- Dashboard: `/admin-dashboard`
+- Protected routes use JWT middleware
 
-# vuepress v2.x temp and cache directory
-.temp
-.cache
+### PIN System
+- Course access controlled by PINs
+- PINs managed through admin dashboard
+- Validation handled by backend API
 
-# Docusaurus cache and generated files
-.docusaurus
+## 📊 Data Management
 
-# Serverless directories
-.serverless/
+### Static Data
+Located in `data/` directory:
+- `courses.json`: Course information
+- `blog-posts.json`: Blog post data
+- `users.json`: User data
+- `pins.json`: PIN data
 
-# FuseBox cache
-.fusebox/
+### Dynamic Data
+Managed through backend API:
+- User management
+- Course content
+- Blog posts
+- PIN generation
 
-# DynamoDB Local files
-.dynamodb/
+## 🛠️ API Integration
 
-# TernJS port file
-.tern-port
+### Frontend API Routes
+Located in `app/api/`:
+- `/api/admin/*`: Admin operations
+- `/api/course-reviews`: Course reviews
+- `/api/tutor-application`: Tutor applications
+- `/api/validate-pin`: PIN validation
 
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
+### Backend Integration
+All API routes proxy to backend service:
+\`\`\`typescript
+const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
+\`\`\`
 
-# yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
+## 🎯 Feature Customization
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+### Certificate Generation
+Edit `components/certificate-generator.tsx`:
+- Certificate design
+- Student information display
+- Download functionality
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+### Course Reviews
+Edit `components/course-reviews.tsx`:
+- Review display format
+- Rating system
+- Submission form
 
-# misc
-.DS_Store
-*.pem
+### Language Switching
+Edit `components/language-switcher.tsx`:
+- Supported languages
+- Translation logic
+- UI elements
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+## 📱 Responsive Design
 
-# local env files
-.env*.local
+### Breakpoints
+\`\`\`css
+sm: 640px   /* Small devices */
+md: 768px   /* Medium devices */
+lg: 1024px  /* Large devices */
+xl: 1280px  /* Extra large devices */
+2xl: 1536px /* 2X large devices */
+\`\`\`
 
-# vercel
-.vercel
+### Mobile-First Approach
+All components are designed mobile-first with progressive enhancement for larger screens.
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+## 🔍 SEO Optimization
 
-# Logs
-logs
-*.log
+### Metadata
+Edit metadata in page components:
+\`\`\`typescript
+export const metadata: Metadata = {
+  title: "Page Title",
+  description: "Page description",
+  keywords: ["keyword1", "keyword2"],
+}
+\`\`\`
 
-# Database
-*.db
-*.sqlite
+### Open Graph
+Configured in `app/layout.tsx` for social media sharing.
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+## 🚀 Deployment Guide
 
-# Temporary files
-*.tmp
-*.temp
+### Environment Variables
+Required for production:
+\`\`\`env
+JWT_SECRET=your-production-secret
+BACKEND_URL=https://your-backend-url.com
+NEXT_PUBLIC_APP_URL=https://your-domain.com
+\`\`\`
+
+### Vercel Deployment
+1. Connect GitHub repository
+2. Set environment variables
+3. Deploy automatically on push
+
+### Build Process
+\`\`\`bash
+npm run build  # Build for production
+npm start      # Start production server
+\`\`\`
+
+## 🧪 Testing
+
+### Component Testing
+\`\`\`bash
+npm test                    # Run all tests
+npm run test:watch         # Watch mode
+npm run test:coverage      # Coverage report
+\`\`\`
+
+### Manual Testing Checklist
+- [ ] All pages load correctly
+- [ ] Navigation works on all devices
+- [ ] Forms submit successfully
+- [ ] Authentication flows work
+- [ ] Course access with PINs
+- [ ] Admin dashboard functionality
+- [ ] Dark/light mode switching
+- [ ] Mobile responsiveness
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**Build Errors**
+- Check TypeScript errors
+- Verify all imports
+- Ensure environment variables are set
+
+**API Connection Issues**
+- Verify backend is running
+- Check CORS configuration
+- Validate environment variables
+
+**Authentication Problems**
+- Ensure JWT_SECRET matches backend
+- Check token expiration
+- Verify middleware configuration
+
+**Styling Issues**
+- Clear browser cache
+- Check Tailwind CSS compilation
+- Verify CSS custom properties
+
+### Debug Mode
+Enable debug logging:
+\`\`\`typescript
+console.log('Debug info:', data)
+\`\`\`
+
+## 📚 Best Practices
+
+### Code Organization
+- Keep components small and focused
+- Use TypeScript for type safety
+- Follow Next.js conventions
+- Implement proper error handling
+
+### Performance
+- Use Next.js Image component
+- Implement proper caching
+- Minimize bundle size
+- Optimize Core Web Vitals
+
+### Security
+- Validate all inputs
+- Use environment variables for secrets
+- Implement proper authentication
+- Follow OWASP guidelines
+
+### Accessibility
+- Use semantic HTML
+- Implement proper ARIA labels
+- Ensure keyboard navigation
+- Test with screen readers
+
+## 🔄 Version Control
+
+### Git Workflow
+\`\`\`bash
+git checkout -b feature/new-feature
+git add .
+git commit -m "Add new feature"
+git push origin feature/new-feature
+\`\`\`
+
+### Branch Strategy
+- `main`: Production-ready code
+- `develop`: Development branch
+- `feature/*`: Feature branches
+- `hotfix/*`: Emergency fixes
+
+## 📞 Support
+
+### Getting Help
+- Check this guide first
+- Review component documentation
+- Check GitHub issues
+- Contact development team
+
+### Reporting Issues
+Include:
+- Steps to reproduce
+- Expected behavior
+- Actual behavior
+- Browser/device information
+- Screenshots if applicable
+
+---
+
+**Happy Editing! 🎉**
+
+This guide covers the most common editing scenarios. For specific technical questions, refer to the component documentation or reach out to the development team.
