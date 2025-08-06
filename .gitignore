@@ -5,6 +5,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+.pnp.js
+.yarn/install-state.gz
 
 # Runtime data
 pids
@@ -119,7 +121,6 @@ dist
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
-.yarn/install-state.gz
 .pnp.*
 
 # IDEs and editors
@@ -150,6 +151,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -178,3 +180,15 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+tmp/
+temp/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

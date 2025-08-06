@@ -19,7 +19,7 @@ interface CertificateGeneratorProps {
   certificateData: CertificateData
 }
 
-export default function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
+function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false)
 
   const handleDownload = async () => {
@@ -318,3 +318,7 @@ export default function CertificateGenerator({ certificateData }: CertificateGen
     </div>
   )
 }
+
+// Export both default and named export
+export default CertificateGenerator
+export { CertificateGenerator }
