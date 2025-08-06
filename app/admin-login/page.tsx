@@ -1,14 +1,12 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Shield, Lock, Loader2 } from "lucide-react"
+import { Shield, Lock, Loader2 } from 'lucide-react'
 
 export default function AdminLogin() {
   const [step, setStep] = useState(1)
@@ -31,7 +29,7 @@ export default function AdminLogin() {
     setIsValidating(true)
 
     try {
-      const response = await fetch("/api/admin/auth", {
+      const response = await fetch("/api/admin-auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: 1, pin: pin1 }),
@@ -76,7 +74,7 @@ export default function AdminLogin() {
     setIsValidating(true)
 
     try {
-      const response = await fetch("/api/admin/auth", {
+      const response = await fetch("/api/admin-auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: 2, pin1, pin2 }),
@@ -85,7 +83,6 @@ export default function AdminLogin() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        // Store admin token securely
         localStorage.setItem("admin_token", data.token)
         localStorage.setItem("admin_expires", data.expires)
 

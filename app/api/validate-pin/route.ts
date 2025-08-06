@@ -4,17 +4,14 @@ export async function POST(request: NextRequest) {
   try {
     const { courseId, pin, deviceId } = await request.json()
 
-    // Validate required fields
     if (!courseId || !pin || !deviceId) {
       return NextResponse.json({ valid: false, message: "Course ID, PIN, and device ID are required" }, { status: 400 })
     }
 
-    // Validate PIN format (5 digits)
     if (!/^\d{5}$/.test(pin)) {
       return NextResponse.json({ valid: false, message: "PIN must be exactly 5 digits" }, { status: 400 })
     }
 
-    // Forward request to backend API
     const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
 
     const response = await fetch(`${backendUrl}/api/pins/validate`, {

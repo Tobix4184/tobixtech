@@ -1,665 +1,562 @@
-# TobixTech Platform - Complete Editing & Deployment Guide
+# TobixTech Platform - Complete Deployment Guide
 
-## 🚀 Quick Start Deployment
+## 🚨 **PERSONALIZATION REQUIRED SECTIONS**
 
-### Prerequisites
-- Node.js 18+ installed
-- Git repository connected to Vercel
-- Backend deployed (see Backend section)
-
-### 1. Environment Variables Setup
-
-**In Vercel Dashboard:**
-1. Go to your project settings
-2. Navigate to "Environment Variables"
-3. Add these variables:
-
-\`\`\`env
-NEXT_PUBLIC_API_URL=https://your-backend-url.fly.dev
-JWT_SECRET=your-super-secure-jwt-secret-key-minimum-32-characters
-SEED_ADMIN_PIN1=123456
-SEED_ADMIN_PIN2=789012
-\`\`\`
-
-**Generate JWT Secret:**
-\`\`\`bash
-# Option 1: Using Node.js
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-
-# Option 2: Using OpenSSL
-openssl rand -hex 32
-
-# Option 3: Online generator
-# Visit: https://generate-secret.vercel.app/32
-\`\`\`
-
-### 2. Deploy to Vercel
-
-**Method 1: Automatic (Recommended)**
-1. Push code to your GitHub repository
-2. Vercel will automatically deploy
-3. Check deployment status in Vercel dashboard
-
-**Method 2: Manual**
-\`\`\`bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel --prod
-\`\`\`
-
-### 3. Verify Deployment
-1. Visit your deployed URL
-2. Test admin login at `/admin-login`
-3. Use the PINs you set in environment variables
-4. Verify all pages load correctly
+Before deploying, you MUST update these sections with YOUR personal information:
 
 ---
 
-## 🎨 Customization Guide
+### 📝 **Section 1: Personal/Business Information**
 
-### Theme & Branding
+**File:** `app/layout.tsx` (Lines 10-50)
 
-**1. Colors (app/globals.css)**
-\`\`\`css
-:root {
-  --primary: 221.2 83.2% 53.3%;        /* Main brand color */
-  --secondary: 210 40% 96%;            /* Secondary color */
-  --accent: 210 40% 96%;               /* Accent color */
-  /* Modify these HSL values to match your brand */
-}
+**REPLACE THESE VALUES:**
+
+\`\`\`typescript
+// CHANGE THIS URL to your actual domain
+metadataBase: new URL("https://YOUR-DOMAIN.vercel.app"),
+
+// UPDATE THESE METADATA VALUES
+title: {
+  default: "YOUR-NAME - Professional Web Development & Digital Marketing Training",
+  template: "%s | YOUR-BUSINESS-NAME",
+},
+description: "YOUR CUSTOM DESCRIPTION HERE",
+
+// UPDATE CONTACT INFO
+contactPoint: {
+  "@type": "ContactPoint",
+  telephone: "YOUR-PHONE-NUMBER", // Example: "+1-555-0123"
+  contactType: "customer service",
+  availableLanguage: ["English"], // Add your languages
+},
+
+// UPDATE SOCIAL MEDIA LINKS
+sameAs: [
+  "https://twitter.com/YOUR-HANDLE", 
+  "https://linkedin.com/in/YOUR-PROFILE", 
+  "https://github.com/YOUR-USERNAME"
+],
 \`\`\`
 
-**2. Logo & Branding**
-- Replace logo files in `public/` directory
-- Update site title in `app/layout.tsx`
-- Modify footer content in `components/footer.tsx`
+---
 
-**3. Typography**
-\`\`\`css
-/* In app/globals.css */
-body {
-  font-family: "Your-Font", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-}
+### 📝 **Section 2: Homepage Content**
+
+**File:** `app/page.tsx` (Lines 20-80)
+
+**CUSTOMIZE THESE SECTIONS:**
+
+\`\`\`typescript
+// UPDATE HERO SECTION (Line 25)
+<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+  Master{" "}
+  <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+    YOUR MAIN SKILL/SERVICE // Example: "Web Development"
+  </span>{" "}
+  & YOUR SECONDARY SKILL // Example: "& Digital Marketing"
+</h1>
+
+// UPDATE DESCRIPTION (Line 32)
+<p className="text-xl text-muted-foreground max-w-2xl">
+  YOUR PERSONAL PITCH HERE // Example: "Transform your career with..."
+</p>
+
+// UPDATE STATISTICS (Line 50-55)
+const stats = [
+  { icon: <Users className="h-6 w-6" />, value: "YOUR-STUDENT-COUNT", label: "Students Trained" },
+  { icon: <BookOpen className="h-6 w-6" />, value: "YOUR-COURSE-COUNT", label: "Courses Available" },
+  { icon: <Trophy className="h-6 w-6" />, value: "YOUR-SUCCESS-RATE", label: "Success Rate" },
+  { icon: <Star className="h-6 w-6" />, value: "YOUR-RATING", label: "Student Rating" }
+]
 \`\`\`
 
-### Content Management
+---
 
-**1. Course Data (data/courses.json)**
+### 📝 **Section 3: About Page**
+
+**File:** `app/about/page.tsx` (Lines 10-50)
+
+**UPDATE YOUR PERSONAL STORY:**
+
+\`\`\`typescript
+// ADD YOUR PHOTO (Line 15)
+<Image
+  src="/YOUR-PHOTO.jpg" // Upload your photo to /public/
+  alt="Your Name"
+  width={400}
+  height={400}
+  className="rounded-2xl shadow-xl"
+/>
+
+// WRITE YOUR BIO (Line 25)
+<h1 className="text-4xl font-bold mb-6">About YOUR-NAME</h1>
+<div className="prose prose-lg max-w-none">
+  <p>YOUR PERSONAL STORY HERE...</p>
+  <p>YOUR EXPERIENCE AND BACKGROUND...</p>
+  <p>YOUR MISSION AND GOALS...</p>
+</div>
+
+// UPDATE SKILLS SECTION (Line 40)
+const skills = [
+  { name: "YOUR-SKILL-1", level: 95 },
+  { name: "YOUR-SKILL-2", level: 90 },
+  { name: "YOUR-SKILL-3", level: 85 },
+  // Add more skills
+]
+\`\`\`
+
+---
+
+### 📝 **Section 4: Contact Information**
+
+**File:** `app/contact/page.tsx` (Lines 15-30)
+
+**UPDATE CONTACT DETAILS:**
+
+\`\`\`typescript
+// UPDATE CONTACT INFO (Line 20)
+const contactInfo = [
+  {
+    icon: <Mail className="h-6 w-6" />,
+    title: "Email",
+    value: "YOUR-EMAIL@domain.com", // Your actual email
+    href: "mailto:YOUR-EMAIL@domain.com"
+  },
+  {
+    icon: <Phone className="h-6 w-6" />,
+    title: "Phone",
+    value: "YOUR-PHONE-NUMBER", // Your actual phone
+    href: "tel:YOUR-PHONE-NUMBER"
+  },
+  {
+    icon: <MapPin className="h-6 w-6" />,
+    title: "Location",
+    value: "YOUR-CITY, YOUR-COUNTRY", // Your location
+    href: "#"
+  }
+]
+\`\`\`
+
+---
+
+### 📝 **Section 5: Course Content**
+
+**File:** `data/courses.json` (Entire File)
+
+**REPLACE WITH YOUR COURSES:**
+
 \`\`\`json
-{
-  "id": "your-course-id",
-  "title": "Your Course Title",
-  "description": "Course description",
-  "instructor": "Instructor Name",
-  "duration": "8 weeks",
-  "level": "Beginner",
-  "price": 299,
-  "originalPrice": 399,
-  "rating": 4.8,
-  "studentsEnrolled": 1250,
-  "image": "/course-image.jpg",
-  "category": "Web Development",
-  "tags": ["React", "Next.js", "TypeScript"]
-}
-\`\`\`
-
-**2. Blog Posts (data/blog-posts.json)**
-\`\`\`json
-{
-  "id": "post-slug",
-  "title": "Blog Post Title",
-  "content": "Full blog content in HTML or Markdown",
-  "excerpt": "Short description",
-  "author": "Author Name",
-  "category": "Technology",
-  "tags": ["React", "Tutorial"],
-  "image": "/blog-image.jpg",
-  "publishedAt": "2024-01-15T10:00:00Z"
-}
-\`\`\`
-
-**3. User Data (data/users.json)**
-\`\`\`json
-{
-  "id": "user-id",
-  "name": "User Name",
-  "email": "user@example.com",
-  "phone": "+1234567890",
-  "enrolledCourses": ["course-id-1", "course-id-2"],
-  "completedCourses": ["course-id-1"],
-  "joinedAt": "2024-01-01T00:00:00Z"
-}
-\`\`\`
-
-### Component Customization
-
-**1. Navigation (components/navigation.tsx)**
-- Add/remove menu items
-- Modify mobile menu behavior
-- Update navigation styling
-
-**2. Footer (components/footer.tsx)**
-- Update contact information
-- Modify social media links
-- Add/remove footer sections
-
-**3. Course Cards (components/course-card.tsx)**
-- Customize card layout
-- Modify pricing display
-- Update enrollment buttons
-
----
-
-## 🔧 Advanced Configuration
-
-### API Integration
-
-**1. Backend Connection**
-\`\`\`typescript
-// lib/api.ts
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
-
-export const apiClient = {
-  get: async (endpoint: string) => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`)
-    return response.json()
-  },
-  post: async (endpoint: string, data: any) => {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    return response.json()
-  }
-}
-\`\`\`
-
-**2. Authentication Setup**
-\`\`\`typescript
-// lib/auth.ts
-export const adminAuth = {
-  login: async (pin1: string, pin2: string) => {
-    return apiClient.post('/api/auth/admin-login', { pin1, pin2 })
-  },
-  verifyToken: async (token: string) => {
-    return apiClient.post('/api/auth/verify-token', { token })
-  }
-}
-\`\`\`
-
-### Performance Optimization
-
-**1. Image Optimization**
-\`\`\`typescript
-// next.config.mjs
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  images: {
-    domains: ['your-cdn-domain.com'],
-    formats: ['image/webp', 'image/avif'],
-  },
-  experimental: {
-    optimizeCss: true,
-  }
-}
-
-export default nextConfig
-\`\`\`
-
-**2. Bundle Analysis**
-\`\`\`bash
-# Install bundle analyzer
-npm install --save-dev @next/bundle-analyzer
-
-# Add to package.json scripts
-"analyze": "ANALYZE=true next build"
-
-# Run analysis
-npm run analyze
-\`\`\`
-
-### SEO Configuration
-
-**1. Metadata (app/layout.tsx)**
-\`\`\`typescript
-export const metadata: Metadata = {
-  title: 'TobixTech - Learn Technology Skills',
-  description: 'Master web development, digital marketing, and more with expert-led courses',
-  keywords: 'web development, courses, programming, digital marketing',
-  authors: [{ name: 'TobixTech Team' }],
-  openGraph: {
-    title: 'TobixTech Learning Platform',
-    description: 'Expert-led technology courses',
-    url: 'https://your-domain.com',
-    siteName: 'TobixTech',
-    images: ['/og-image.jpg'],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'TobixTech Learning Platform',
-    description: 'Expert-led technology courses',
-    images: ['/twitter-image.jpg'],
-  }
-}
-\`\`\`
-
-**2. Sitemap Generation**
-\`\`\`typescript
-// app/sitemap.ts
-import { MetadataRoute } from 'next'
-
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: 'https://your-domain.com',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 1,
-    },
-    {
-      url: 'https://your-domain.com/courses',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://your-domain.com/blog',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.5,
-    },
-  ]
-}
-\`\`\`
-
----
-
-## 🗄️ Backend Setup Guide
-
-### 1. Backend Development
-
-**Use the comprehensive prompt in `BACKEND_DEVELOPMENT_PROMPT.md`:**
-1. Copy the entire prompt
-2. Paste it to Gemini AI or Claude
-3. Follow the generated backend code
-4. Deploy to Fly.io as instructed
-
-**Key Backend Features:**
-- Node.js + Express + TypeScript
-- MongoDB Atlas database
-- JWT authentication with device binding
-- Rate limiting and security
-- Complete API for all frontend features
-
-### 2. Database Setup (MongoDB Atlas)
-
-**Step-by-step:**
-1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create free account
-3. Create new cluster (M0 Sandbox - Free)
-4. Create database user with read/write permissions
-5. Configure network access (0.0.0.0/0 for production)
-6. Get connection string
-7. Add to backend environment variables
-
-### 3. Backend Deployment (Fly.io)
-
-**Commands:**
-\`\`\`bash
-# Install Fly CLI
-curl -L https://fly.io/install.sh | sh
-
-# Login
-fly auth login
-
-# In your backend directory
-fly launch
-
-# Set environment variables
-fly secrets set MONGODB_URI="your-connection-string"
-fly secrets set JWT_SECRET="your-jwt-secret"
-fly secrets set FRONTEND_URL="https://your-vercel-app.vercel.app"
-
-# Deploy
-fly deploy
-\`\`\`
-
----
-
-## 🔒 Security Configuration
-
-### Admin PIN Management
-
-**1. Change Default PINs**
-\`\`\`env
-# In Vercel environment variables
-SEED_ADMIN_PIN1=your-secure-pin-1
-SEED_ADMIN_PIN2=your-secure-pin-2
-\`\`\`
-
-**2. PIN Security Features**
-- Device binding (PINs work only on registered devices)
-- Automatic expiration (4-hour sessions)
-- Rate limiting (5 attempts per 15 minutes)
-- Audit logging
-
-### Environment Security
-
-**1. Production Environment Variables**
-\`\`\`env
-# Never commit these to Git
-NEXT_PUBLIC_API_URL=https://your-backend.fly.dev
-JWT_SECRET=32-character-minimum-secret
-SEED_ADMIN_PIN1=6-digit-secure-pin
-SEED_ADMIN_PIN2=6-digit-secure-pin
-\`\`\`
-
-**2. Security Headers**
-\`\`\`typescript
-// next.config.mjs
-const nextConfig = {
-  async headers() {
-    return [
+[
+  {
+    "id": "your-course-1",
+    "title": "Your Course Title",
+    "description": "Your course description",
+    "instructor": "YOUR NAME",
+    "duration": "X weeks",
+    "level": "Beginner/Intermediate/Advanced",
+    "price": "YOUR-PRICE",
+    "image": "/your-course-image.jpg",
+    "skills": ["Skill 1", "Skill 2", "Skill 3"],
+    "syllabus": [
       {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-        ],
-      },
+        "module": "Module 1",
+        "title": "Your Module Title",
+        "duration": "X hours",
+        "topics": ["Topic 1", "Topic 2"]
+      }
     ]
+  }
+]
+\`\`\`
+
+---
+
+### 📝 **Section 6: Footer Links**
+
+**File:** `components/footer.tsx` (Lines 20-40)
+
+**UPDATE FOOTER INFORMATION:**
+
+\`\`\`typescript
+// UPDATE COMPANY INFO (Line 25)
+<div>
+  <h3 className="font-semibold mb-4">YOUR-COMPANY-NAME</h3>
+  <p className="text-sm text-muted-foreground">
+    YOUR COMPANY DESCRIPTION OR TAGLINE
+  </p>
+</div>
+
+// UPDATE SOCIAL LINKS (Line 35)
+const socialLinks = [
+  { icon: <Twitter className="h-5 w-5" />, href: "https://twitter.com/YOUR-HANDLE" },
+  { icon: <Linkedin className="h-5 w-5" />, href: "https://linkedin.com/in/YOUR-PROFILE" },
+  { icon: <Github className="h-5 w-5" />, href: "https://github.com/YOUR-USERNAME" },
+  { icon: <Youtube className="h-5 w-5" />, href: "https://youtube.com/@YOUR-CHANNEL" }
+]
+\`\`\`
+
+---
+
+### 📝 **Section 7: Navigation Menu**
+
+**File:** `components/navigation.tsx` (Lines 15-25)
+
+**CUSTOMIZE NAVIGATION:**
+
+\`\`\`typescript
+// UPDATE LOGO (Line 20)
+<Link href="/" className="flex items-center space-x-2">
+  <Image
+    src="/your-logo.png" // Upload your logo to /public/
+    alt="Your Brand"
+    width={32}
+    height={32}
+  />
+  <span className="font-bold text-xl">YOUR-BRAND-NAME</span>
+</Link>
+\`\`\`
+
+---
+
+### 📝 **Section 8: Images and Assets**
+
+**UPLOAD THESE FILES TO `/public/` FOLDER:**
+
+1. **your-logo.png** - Your brand logo (32x32px minimum)
+2. **your-photo.jpg** - Your professional headshot (400x400px)
+3. **hero-image.jpg** - Main hero section image (1200x800px)
+4. **course-images/** - Individual course thumbnails (600x400px each)
+
+**REPLACE PLACEHOLDER IMAGES:**
+- Find all instances of `/placeholder.jpg` in your code
+- Replace with your actual image paths
+- Update alt text to describe your images
+
+---
+
+### 📝 **Section 9: Environment Variables**
+
+**CREATE `.env.local` FILE:**
+
+\`\`\`env
+# Your Backend API URL (will be provided after backend deployment)
+BACKEND_URL=https://your-backend-name.fly.dev
+
+# Generate this using: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+JWT_SECRET=your-generated-jwt-secret-64-characters-long
+
+# Optional: Analytics and tracking
+NEXT_PUBLIC_GA_ID=your-google-analytics-id
+NEXT_PUBLIC_FACEBOOK_PIXEL_ID=your-facebook-pixel-id
+\`\`\`
+
+---
+
+### 📝 **Section 10: SEO and Metadata**
+
+**File:** `app/layout.tsx` (Lines 8-20)
+
+**UPDATE SEO INFORMATION:**
+
+\`\`\`typescript
+// UPDATE VERIFICATION CODES (Line 15)
+verification: {
+  google: "your-google-search-console-code",
+  yandex: "your-yandex-verification-code", 
+  yahoo: "your-yahoo-verification-code",
+},
+
+// UPDATE CANONICAL URL (Line 20)
+alternates: {
+  canonical: "https://YOUR-ACTUAL-DOMAIN.com",
+  languages: {
+    "en-US": "https://YOUR-ACTUAL-DOMAIN.com",
+    // Add more languages if needed
   },
-}
+},
 \`\`\`
 
 ---
 
-## 🧪 Testing & Quality Assurance
+## 🚀 **DEPLOYMENT CHECKLIST**
 
-### Pre-Deployment Checklist
+After personalizing all sections above:
 
-**1. Functionality Tests**
-- [ ] All pages load correctly
-- [ ] Navigation works on mobile and desktop
-- [ ] Admin login with correct PINs
-- [ ] Course pages display properly
-- [ ] Blog posts load and display
-- [ ] Contact form submissions
-- [ ] Theme switching (dark/light)
-- [ ] Certificate generation
+### **Pre-Deployment**
+- [ ] Updated all personal information
+- [ ] Uploaded all required images to `/public/`
+- [ ] Generated JWT secret
+- [ ] Created `.env.local` with your values
+- [ ] Tested locally with `npm run dev`
 
-**2. Performance Tests**
-- [ ] Lighthouse score 90+ on all metrics
-- [ ] Images load quickly and are optimized
-- [ ] No console errors
-- [ ] Fast page transitions
-- [ ] Mobile performance acceptable
+### **Backend Deployment**
+- [ ] Used `BACKEND_DEVELOPMENT_PROMPT.md` to generate backend
+- [ ] Deployed backend to Fly.io
+- [ ] Updated `BACKEND_URL` in environment variables
+- [ ] Tested backend endpoints
 
-**3. Security Tests**
-- [ ] Admin areas require authentication
-- [ ] Invalid PINs are rejected
-- [ ] Rate limiting works
-- [ ] No sensitive data in client-side code
-- [ ] HTTPS enforced
+### **Frontend Deployment**
+- [ ] Pushed code to GitHub
+- [ ] Connected Vercel to GitHub repository
+- [ ] Set environment variables in Vercel
+- [ ] Deployed to Vercel
+- [ ] Verified all pages load correctly
 
-### Testing Commands
-
-\`\`\`bash
-# Build test
-npm run build
-
-# Lint check
-npm run lint
-
-# Type checking
-npx tsc --noEmit
-
-# Performance audit
-npx lighthouse https://your-domain.com --view
-\`\`\`
+### **Post-Deployment Testing**
+- [ ] Homepage loads with your personal content
+- [ ] All navigation links work
+- [ ] Contact form sends to your email
+- [ ] Course pages display your courses
+- [ ] Admin login works (if implemented)
+- [ ] Site is mobile-responsive
+- [ ] SEO metadata is correct
 
 ---
 
-## 🚨 Troubleshooting
+## 🆘 **COMMON ISSUES & SOLUTIONS**
 
-### Common Deployment Issues
+### **Issue: Images not loading**
+**Solution:** 
+1. Ensure images are in `/public/` folder
+2. Use correct paths (start with `/` not `./`)
+3. Check file names match exactly (case-sensitive)
 
-**1. Build Errors**
-\`\`\`bash
-# Clear Next.js cache
-rm -rf .next
+### **Issue: Environment variables not working**
+**Solution:**
+1. Check `.env.local` exists in root directory
+2. Restart development server after adding variables
+3. In Vercel, check environment variables are set
 
-# Clear node modules
-rm -rf node_modules package-lock.json
-npm install
+### **Issue: Build fails on deployment**
+**Solution:**
+1. Run `npm run build` locally first
+2. Fix any TypeScript errors
+3. Ensure all imports are correct
 
-# Rebuild
-npm run build
-\`\`\`
-
-**2. Environment Variable Issues**
-- Ensure all required variables are set in Vercel
-- Check variable names match exactly
-- Restart deployment after adding variables
-
-**3. API Connection Issues**
-- Verify backend is deployed and running
-- Check CORS configuration in backend
-- Ensure API URL is correct in environment variables
-
-**4. Admin Login Issues**
-- Verify PINs match environment variables
-- Check JWT secret is set correctly
-- Ensure backend authentication endpoints work
-
-### Performance Issues
-
-**1. Slow Loading**
-- Optimize images (use WebP format)
-- Enable Next.js image optimization
-- Implement lazy loading
-- Minimize bundle size
-
-**2. Memory Issues**
-- Check for memory leaks in components
-- Optimize large data structures
-- Use React.memo for expensive components
-
-### Security Issues
-
-**1. Authentication Problems**
-- Verify JWT secret consistency
-- Check token expiration settings
-- Ensure device fingerprinting works
-
-**2. CORS Issues**
-- Configure backend CORS properly
-- Ensure frontend domain is whitelisted
-- Check preflight request handling
+### **Issue: 404 errors on deployed site**
+**Solution:**
+1. Check file names match routes
+2. Ensure all required files are pushed to GitHub
+3. Verify Next.js routing structure
 
 ---
 
-## 📊 Monitoring & Analytics
+## ✅ **FINAL VERIFICATION**
 
-### Performance Monitoring
+Your site is ready when:
 
-**1. Vercel Analytics**
-- Enable in Vercel dashboard
-- Monitor Core Web Vitals
-- Track page performance
-
-**2. Custom Analytics**
-\`\`\`typescript
-// lib/analytics.ts
-export const trackEvent = (eventName: string, properties?: any) => {
-  if (typeof window !== 'undefined') {
-    // Google Analytics 4
-    gtag('event', eventName, properties)
-    
-    // Custom analytics
-    fetch('/api/analytics/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: eventName, properties })
-    })
-  }
-}
-\`\`\`
-
-### Error Monitoring
-
-**1. Error Boundary**
-\`\`\`typescript
-// components/error-boundary.tsx
-'use client'
-
-import { Component, ReactNode } from 'react'
-
-interface Props {
-  children: ReactNode
-}
-
-interface State {
-  hasError: boolean
-}
-
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = { hasError: false }
-  }
-
-  static getDerivedStateFromError(): State {
-    return { hasError: true }
-  }
-
-  componentDidCatch(error: Error, errorInfo: any) {
-    console.error('Error caught by boundary:', error, errorInfo)
-    // Send to error reporting service
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <div>Something went wrong. Please refresh the page.</div>
-    }
-
-    return this.props.children
-  }
-}
-\`\`\`
+1. **✅ Personal branding** - Logo, colors, and content reflect your brand
+2. **✅ Contact info** - All contact methods work and go to you
+3. **✅ Course content** - Displays your actual courses and pricing
+4. **✅ Social links** - All social media links point to your profiles
+5. **✅ Images** - All placeholder images replaced with your content
+6. **✅ SEO** - Meta tags, titles, and descriptions are personalized
+7. **✅ Functionality** - All features work without errors
+8. **✅ Mobile** - Site looks great on all devices
 
 ---
 
-## 🔄 Maintenance & Updates
+## 🎯 **SUCCESS!**
 
-### Regular Maintenance Tasks
+Once you've completed all personalization sections above, your TobixTech platform will be:
+- ✅ Fully customized with your branding
+- ✅ Ready for professional use
+- ✅ Optimized for search engines
+- ✅ Mobile-responsive
+- ✅ Production-ready
 
-**1. Weekly**
-- Check deployment status
-- Review error logs
-- Monitor performance metrics
-- Update content as needed
+**Your professional educational platform is now live! 🎉**
 
-**2. Monthly**
-- Update dependencies
-- Security audit
-- Performance optimization
-- Backup data
+---
 
-**3. Quarterly**
-- Major feature updates
-- Security review
-- Performance analysis
-- User feedback integration
+**Need Help?** If you encounter any issues:
+1. Check this guide for the specific section
+2. Verify you've updated all required fields
+3. Test locally before deploying
+4. Use browser developer tools to debug issues
 
-### Update Process
-
-**1. Dependency Updates**
-\`\`\`bash
-# Check outdated packages
-npm outdated
-
-# Update packages
-npm update
-
-# Test after updates
-npm run build
-npm run lint
+**Happy teaching! 📚🚀**
 \`\`\`
 
-**2. Security Updates**
-\`\`\`bash
-# Audit dependencies
-npm audit
+```plaintext file=".gitignore"
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Fix vulnerabilities
-npm audit fix
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Manual fixes if needed
-npm audit fix --force
-\`\`\`
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
 
----
+# nyc test coverage
+.nyc_output
 
-## 📞 Support & Resources
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
 
-### Documentation
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [shadcn/ui Documentation](https://ui.shadcn.com)
-- [Vercel Documentation](https://vercel.com/docs)
+# Bower dependency directory (https://bower.io/)
+bower_components
 
-### Community Support
-- [Next.js GitHub Discussions](https://github.com/vercel/next.js/discussions)
-- [Tailwind CSS Discord](https://tailwindcss.com/discord)
-- [Vercel Community](https://vercel.com/community)
+# node-waf configuration
+.lock-wscript
 
-### Professional Support
-- Create GitHub issues for bugs
-- Contact: support@tobixtech.com
-- Documentation updates: docs@tobixtech.com
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
 
----
+# Dependency directories
+node_modules/
+jspm_packages/
 
-## ✅ Final Deployment Checklist
+# Snowpack dependency directory (https://snowpack.dev/)
+web_modules/
 
-### Pre-Launch
-- [ ] All environment variables configured
-- [ ] Backend deployed and tested
-- [ ] Database connected and seeded
-- [ ] Admin authentication working
-- [ ] All pages loading correctly
-- [ ] Mobile responsiveness verified
-- [ ] Performance optimized (Lighthouse 90+)
-- [ ] SEO metadata configured
-- [ ] Error handling implemented
-- [ ] Security measures in place
+# TypeScript cache
+*.tsbuildinfo
 
-### Post-Launch
-- [ ] Monitor deployment status
-- [ ] Test all functionality
-- [ ] Check analytics setup
-- [ ] Verify admin access
-- [ ] Monitor error logs
-- [ ] Performance monitoring active
-- [ ] Backup systems in place
-- [ ] Documentation updated
+# Optional npm cache directory
+.npm
 
----
+# Optional eslint cache
+.eslintcache
 
-**🎉 Congratulations! Your TobixTech platform is now live and ready for users!**
+# Optional stylelint cache
+.stylelintcache
 
-For any issues or questions, refer to this guide or contact support. Keep this document updated as you make changes to the platform.
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+out/
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+# Comment in the public line in if your project uses Gatsby and not Next.js
+# https://nextjs.org/blog/next-9-1#public-directory-support
+# public
+
+# vuepress build output
+.vuepress/dist
+
+# vuepress v2.x temp and cache directory
+.temp
+.cache
+
+# Docusaurus cache and generated files
+.docusaurus
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs
+logs
+*.log
+
+# Database
+*.db
+*.sqlite
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

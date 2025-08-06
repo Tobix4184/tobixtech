@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Award, Download, Share2, Calendar, BookOpen, CheckCircle } from "lucide-react"
+import { Award, Download, Share2, Calendar, BookOpen, CheckCircle } from 'lucide-react'
 
 interface CertificateData {
   studentName: string
@@ -16,11 +16,33 @@ interface CertificateData {
 }
 
 interface CertificateGeneratorProps {
-  certificateData: CertificateData
+  courseName: string
+  studentName: string  
+  completionDate: string
+  onClose?: () => void
+  certificateData?: CertificateData
 }
 
-function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
+export default function CertificateGenerator({ 
+  courseName, 
+  studentName, 
+  completionDate, 
+  onClose,
+  certificateData 
+}: CertificateGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false)
+
+  const defaultCertificateData: CertificateData = {
+    studentName: studentName || "Student",
+    courseName: courseName || "Course",
+    completionDate: completionDate || new Date().toLocaleDateString(),
+    certificateId: `CERT-${Date.now()}`,
+    instructorName: "Tobias Esan-George",
+    courseHours: 40,
+    grade: "Pass"
+  }
+
+  const finalCertificateData = certificateData || defaultCertificateData
 
   const handleDownload = async () => {
     setIsGenerating(true)
@@ -145,20 +167,20 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
               <div class="subtitle">This is to certify that</div>
             </div>
             
-            <div class="student-name">${certificateData.studentName}</div>
+            <div class="student-name">${finalCertificateData.studentName}</div>
             
             <div class="completion-text">has successfully completed the course</div>
             
-            <div class="course-name">${certificateData.courseName}</div>
+            <div class="course-name">${finalCertificateData.courseName}</div>
             
             <div class="completion-text">on</div>
             
-            <div class="date">${certificateData.completionDate}</div>
+            <div class="date">${finalCertificateData.completionDate}</div>
             
             <div class="signature-section">
               <div class="signature">
                 <div class="signature-line"></div>
-                <div class="instructor-name">${certificateData.instructorName}</div>
+                <div class="instructor-name">${finalCertificateData.instructorName}</div>
                 <div class="instructor-title">Lead Instructor</div>
               </div>
               
@@ -180,7 +202,7 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-      a.download = `${certificateData.studentName.replace(/\s+/g, "_")}_${certificateData.courseName.replace(/\s+/g, "_")}_Certificate.html`
+      a.download = `${finalCertificateData.studentName.replace(/\s+/g, "_")}_${finalCertificateData.courseName.replace(/\s+/g, "_")}_Certificate.html`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
@@ -195,8 +217,8 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `Certificate of Completion - ${certificateData.courseName}`,
-        text: `I've completed ${certificateData.courseName} at Tobix Technology!`,
+        title: `Certificate of Completion - ${finalCertificateData.courseName}`,
+        text: `I've completed ${finalCertificateData.courseName} at Tobix Technology!`,
         url: window.location.href,
       })
     } else {
@@ -223,11 +245,11 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
           <div className="text-center mb-8">
             <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">This is to certify that</p>
             <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-6 border-b-2 border-gray-300 dark:border-gray-600 pb-2 inline-block">
-              {certificateData.studentName}
+              {finalCertificateData.studentName}
             </h2>
             <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">has successfully completed the course</p>
             <h3 className="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6">
-              {certificateData.courseName}
+              {finalCertificateData.courseName}
             </h3>
 
             {/* Course Details */}
@@ -235,17 +257,17 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
               <div className="text-center">
                 <Calendar className="h-6 w-6 text-gray-500 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 dark:text-gray-400">Completion Date</p>
-                <p className="font-semibold">{certificateData.completionDate}</p>
+                <p className="font-semibold">{finalCertificateData.completionDate}</p>
               </div>
               <div className="text-center">
                 <BookOpen className="h-6 w-6 text-gray-500 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 dark:text-gray-400">Course Hours</p>
-                <p className="font-semibold">{certificateData.courseHours} hours</p>
+                <p className="font-semibold">{finalCertificateData.courseHours} hours</p>
               </div>
               <div className="text-center">
                 <CheckCircle className="h-6 w-6 text-gray-500 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 dark:text-gray-400">Grade</p>
-                <p className="font-semibold">{certificateData.grade || "Pass"}</p>
+                <p className="font-semibold">{finalCertificateData.grade || "Pass"}</p>
               </div>
             </div>
           </div>
@@ -254,7 +276,7 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
           <div className="flex justify-between items-end">
             <div className="text-left">
               <div className="border-t-2 border-gray-400 pt-2 w-48">
-                <p className="font-semibold">{certificateData.instructorName}</p>
+                <p className="font-semibold">{finalCertificateData.instructorName}</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Course Instructor</p>
               </div>
             </div>
@@ -266,7 +288,7 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
             </div>
             <div className="text-right">
               <p className="text-xs text-gray-500 mb-2">Certificate ID</p>
-              <p className="font-mono text-sm">{certificateData.certificateId}</p>
+              <p className="font-mono text-sm">{finalCertificateData.certificateId}</p>
             </div>
           </div>
         </div>
@@ -319,6 +341,4 @@ function CertificateGenerator({ certificateData }: CertificateGeneratorProps) {
   )
 }
 
-// Export both default and named export
-export default CertificateGenerator
 export { CertificateGenerator }

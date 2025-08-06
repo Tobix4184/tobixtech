@@ -37,10 +37,7 @@ export async function GET(request: NextRequest) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ message: "Failed to fetch blog posts" }))
-      return NextResponse.json(
-        { message: errorData.message || "Failed to fetch blog posts" },
-        { status: response.status },
-      )
+      return NextResponse.json({ message: errorData.message || "Failed to fetch blog posts" }, { status: response.status })
     }
 
     const data = await response.json()
@@ -52,42 +49,3 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const admin = verifyAdminToken(request)
-  if (!admin) {
-    return NextResponse.json({ message: "Unauthorized access" }, { status: 401 })
-  }
-
-  try {
-    const body = await request.json()
-
-    // Validate required fields
-    if (!body.title || !body.content) {
-      return NextResponse.json({ message: "Title and content are required" }, { status: 400 })
-    }
-
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000"
-
-    const response = await fetch(`${backendUrl}/api/admin/blog-posts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "TobixTech-Frontend/1.0",
-      },
-      body: JSON.stringify(body),
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: "Failed to create blog post" }))
-      return NextResponse.json(
-        { message: errorData.message || "Failed to create blog post" },
-        { status: response.status },
-      )
-    }
-
-    const data = await response.json()
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error("Error creating blog post:", error)
-    return NextResponse.json({ message: "Blog post creation service temporarily unavailable" }, { status: 500 })
-  }
-}

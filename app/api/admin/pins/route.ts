@@ -57,12 +57,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    // Validate required fields
     if (!body.courseId || !body.expirationDate) {
       return NextResponse.json({ message: "Course ID and expiration date are required" }, { status: 400 })
     }
 
-    // Validate usage limit
     if (body.usageLimit && (body.usageLimit < 1 || body.usageLimit > 100)) {
       return NextResponse.json({ message: "Usage limit must be between 1 and 100" }, { status: 400 })
     }

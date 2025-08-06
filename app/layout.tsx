@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter } from 'next/font/google'
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navigation } from "@/components/navigation"
@@ -77,7 +77,6 @@ export const metadata: Metadata = {
     canonical: "https://tobixtech.vercel.app",
     languages: {
       "en-US": "https://tobixtech.vercel.app",
-      "es-ES": "https://tobixtech.vercel.app/es",
     },
   },
   category: "education",
@@ -95,9 +94,13 @@ const jsonLd = {
     "@type": "ContactPoint",
     telephone: "+1-555-0123",
     contactType: "customer service",
-    availableLanguage: ["English", "Spanish"],
+    availableLanguage: ["English"],
   },
-  sameAs: ["https://twitter.com/tobixtech", "https://linkedin.com/company/tobixtech", "https://github.com/tobixtech"],
+  sameAs: [
+    "https://twitter.com/tobixtech", 
+    "https://linkedin.com/company/tobixtech", 
+    "https://github.com/tobixtech"
+  ],
   offers: {
     "@type": "Offer",
     category: "Education",

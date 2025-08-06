@@ -58,7 +58,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    // Validate required fields
     if (!body.email) {
       return NextResponse.json({ message: "Email is required" }, { status: 400 })
     }
